@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Planck Play LLP | R&amp;D-led engineering company, Coimbatore</title>
+  <meta name="description" content="Planck Play takes hard technical problems from research and proof-of-concept to production-ready electronics, mechanical designs and software. Based in Coimbatore, India.">
+  <meta name="theme-color" content="#000000">
+  <link rel="icon" type="image/png" href="assets/images/brand/pp-favicon.png">
+
+  <!-- Decide on the splash before first paint (no flash on repeat visits). -->
+  <script>
+    (function () {
+      var seen = false;
+      try { seen = sessionStorage.getItem('pp-splash-seen') === '1'; } catch (e) {}
+      if (seen || /[?&]static\b/.test(location.search)) document.documentElement.className += ' no-splash';
+      else document.documentElement.className += ' splash-active';
+    })();
+  </script>
+
+  <!-- ─── Styles: design system → theme → base → motion → components → pages ─── -->
+  <link rel="stylesheet" href="styles/fonts.css">
+  <link rel="stylesheet" href="styles/design-system.css">
+  <link rel="stylesheet" href="styles/theme.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/fx.css">
+  <link rel="stylesheet" href="styles/splash.css">
+
+  <link rel="stylesheet" href="styles/components/gnav.css">
+  <link rel="stylesheet" href="styles/components/logo-mark.css">
+  <link rel="stylesheet" href="styles/components/page-hero.css">
+  <link rel="stylesheet" href="styles/components/cta.css">
+  <link rel="stylesheet" href="styles/components/footer.css">
+  <link rel="stylesheet" href="styles/components/to-top.css">
+  <link rel="stylesheet" href="styles/components/section-header.css">
+  <link rel="stylesheet" href="styles/components/cards.css">
+  <link rel="stylesheet" href="styles/components/tech-tag.css">
+  <link rel="stylesheet" href="styles/components/image-slot.css">
+  <link rel="stylesheet" href="styles/components/process-timeline.css">
+  <link rel="stylesheet" href="styles/components/demo-flow.css">
+  <link rel="stylesheet" href="styles/components/registrations.css">
+  <link rel="stylesheet" href="styles/components/detail-row.css">
+  <link rel="stylesheet" href="styles/components/forms.css">
+
+  <link rel="stylesheet" href="styles/pages/home.css">
+  <link rel="stylesheet" href="styles/pages/inner-pages.css">
+  <link rel="stylesheet" href="styles/pages/contact.css">
+</head>
+<body>
+  <!-- Splash: brand loader. Played by src/core/splash.js; click or any key skips.
+       The ring around the mark fills with the page's real loading progress. -->
+  <div id="splash" class="splash" aria-hidden="true">
+    <div class="splash__stage">
+      <div class="splash__emblem">
+        <svg class="splash__ring" viewBox="0 0 120 120">
+          <circle class="splash__ring-track" cx="60" cy="60" r="56"/>
+          <circle class="splash__ring-fill" cx="60" cy="60" r="56" transform="rotate(-90 60 60)"/>
+        </svg>
+        <img class="splash__mark" src="assets/images/brand/pp-mark.png" alt="">
+      </div>
+      <img class="splash__word" src="assets/images/brand/pp-wordmark-white.png" alt="Planck Play">
+      <span class="splash__pct"><b data-splash-pct>0</b>%</span>
+    </div>
+    <div class="splash__foot">
+      <span>Planck Play LLP</span>
+      <span>R&amp;D-led engineering · Coimbatore</span>
+    </div>
+  </div>
+
+  <div id="app">
+    <noscript><p style="padding:48px; color:#F5F5F7; font-family:system-ui">Planck Play LLP — please enable JavaScript to view this site.</p></noscript>
+  </div>
+
+  <!-- ─── Scripts ─────────────────────────────────────────────────────────────
+       Plain scripts (not ES modules) so the site runs straight from file://.
+       Order matters: each file reads what earlier files put on window.PP. -->
+
+  <!-- Core -->
+  <script src="src/core/html.js"></script>
+  <script src="src/config.js"></script>
+  <script src="src/core/motion.js"></script>
+  <script src="src/core/icons.js"></script>
+  <script src="src/core/behaviors.js"></script>
+  <script src="src/core/router.js"></script>
+  <script src="src/core/fx.js"></script>
+  <script src="src/core/splash.js"></script>
+
+  <!-- Content -->
+  <script src="src/data/site-content.js"></script>
+  <script src="src/data/home-content.js"></script>
+
+  <!-- Components -->
+  <script src="src/components/TechTag.js"></script>
+  <script src="src/components/ImageSlot.js"></script>
+  <script src="src/components/SectionHeader.js"></script>
+  <script src="src/components/LogoMark.js"></script>
+  <script src="src/components/GlobalNav.js"></script>
+  <script src="src/components/Footer.js"></script>
+  <script src="src/components/BackToTop.js"></script>
+  <script src="src/components/Layout.js"></script>
+  <script src="src/components/PageHero.js"></script>
+  <script src="src/components/CTASection.js"></script>
+  <script src="src/components/ArtPanel.js"></script>
+  <script src="src/components/HomeHero.js"></script>
+  <script src="src/components/Highlights.js"></script>
+  <script src="src/components/HomeSections.js"></script>
+  <script src="src/components/ServiceCard.js"></script>
+  <script src="src/components/CapabilityCard.js"></script>
+  <script src="src/components/IndustryCard.js"></script>
+  <script src="src/components/ProcessTimeline.js"></script>
+  <script src="src/components/InfoPanel.js"></script>
+  <script src="src/components/DemoFlowCard.js"></script>
+  <script src="src/components/RegistrationList.js"></script>
+  <script src="src/components/DetailRow.js"></script>
+  <script src="src/components/ContactForm.js"></script>
+
+  <!-- Pages -->
+  <script src="src/pages/Home.js"></script>
+  <script src="src/pages/Solutions.js"></script>
+  <script src="src/pages/Industries.js"></script>
+  <script src="src/pages/Capabilities.js"></script>
+  <script src="src/pages/RD.js"></script>
+  <script src="src/pages/About.js"></script>
+  <script src="src/pages/Careers.js"></script>
+  <script src="src/pages/Contact.js"></script>
+  <script src="src/pages/Legal.js"></script>
+  <script src="src/pages/NotFound.js"></script>
+
+  <!-- Boot -->
+  <script>
+    (function () {
+      var P = PP.pages;
+      PP.registerPages([
+        P.Home, P.Solutions, P.Industries, P.Capabilities, P.RD,
+        P.About, P.Careers, P.Contact, P.Privacy, P.Terms, P.Cookies, P.NotFound,
+      ]);
+      // The page renders as the splash curtain lifts, so its entrance plays in view.
+      PP.splash.run().then(function () { PP.startRouter(document.getElementById('app')); });
+    })();
+  </script>
+</body>
+</html>

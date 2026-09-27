@@ -1,0 +1,32 @@
+/* ServiceCard */
+.service-card { height: 100%; min-height: 220px; }
+
+/* CapabilityCard */
+.capability-card { height: 100%; min-height: 200px; }
+.capability-card.is-pending { border-style: dashed; }
+.capability-card .pp-card__label { letter-spacing: .06em; font-size: 12px; }
+
+/* IndustryCard */
+.industry-card { gap: var(--s-5); padding: var(--s-6); height: 100%; }
+.industry-card__title { font-size: clamp(21px, 1.89vw, 26px); line-height: 1.02; }
+.industry-card__block { display: flex; flex-direction: column; gap: 8px; }
+.industry-card__problems { margin: 0; font-size: 16px; line-height: 1.55; text-wrap: pretty; }
+.industry-card__applies { gap: 10px; margin-top: auto; padding-top: 16px; border-top: 1px solid var(--color-divider); }
+
+/* Generic numbered panel used by R&D kinds, Why-us, Engagement models */
+.info-panel { display: flex; flex-direction: column; gap: var(--s-3); padding: var(--s-6); border-radius: var(--radius-card); background: var(--pp-panel); color: var(--color-text); }
+.info-panel__index { font-family: var(--font-mono); font-size: 12px; color: var(--pp-accent-text); }
+.info-panel__title { margin: 0; font-family: var(--font-display); font-weight: 500; font-size: 21px; line-height: 1.05; letter-spacing: -0.015em; }
+.info-panel__text { margin: 0; font-size: 15px; line-height: 1.55; color: var(--pp-muted); }
+.info-panel__output {
+  margin: auto 0 0; padding-top: 8px; font-family: var(--font-mono); font-size: 11px; line-height: 1.5;
+  letter-spacing: .06em; text-transform: uppercase; color: var(--color-text);
+}
+.info-panel--why { gap: var(--s-4); padding: var(--s-6); border: 1px solid var(--pp-card-border); }
+.info-panel--why .info-panel__title { font-size: clamp(22px, 2vw, 26px); line-height: 1.1; }
+.info-panel--why .info-panel__text { font-size: 16px; line-height: 1.6; }
+.info-panel__badge {
+  display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%;
+  background: rgba(233, 11, 0, .16); font-family: var(--font-mono); font-size: 12px; color: var(--pp-orange);
+}
+.info-panel--engagement { flex: 1 1 220px; gap: 14px; }

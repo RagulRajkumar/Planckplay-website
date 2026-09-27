@@ -1,0 +1,34 @@
+/* Inner pages (Solutions, Industries, Capabilities, R&D, About, Careers, legal). */
+.engagement-list--white { --pp-panel: #FFFFFF; }
+.anchor-wrap { height: 100%; scroll-margin-top: var(--header-h); }
+
+/* About */
+.about-disciplines .tech-tag { font-size: 14px; padding: 8px 14px; }
+.why-with-key { position: relative; display: flex; }
+.why-with-key .info-panel { flex: 1; }
+.why-with-key__key {
+  position: absolute; top: 34px; right: 28px; font-family: var(--font-mono); font-size: 11px;
+  letter-spacing: .06em; text-transform: uppercase; color: var(--pp-muted);
+}
+.team-card { display: flex; flex-direction: column; gap: 6px; }
+.team-card__photo { position: relative; aspect-ratio: 4 / 5; border-radius: 24px; overflow: hidden; background: var(--pp-paper-2); margin-bottom: 10px; }
+.team-card__name { margin: 0; font-family: var(--font-display); font-weight: 500; font-size: 22px; letter-spacing: -0.015em; }
+.team-card__role { font-size: 15px; color: var(--pp-muted); }
+.team-card__exp { margin-top: 4px; font-size: 12px; color: var(--pp-muted); }
+
+/* Careers */
+.careers-card { min-height: 280px; }
+.careers-card__note { align-self: flex-start; margin-top: auto; padding-top: var(--s-3); font-family: var(--font-mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--pp-accent-text); }
+
+
+/* Shared inner-page pieces (moved from the old home stylesheet) */
+.band--glow-top { background-image: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(233, 11, 0, .12), transparent 70%); }
+.engagement-list { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--grid-gap); }
+
+/* Legal pages */
+.legal__body { max-width: 760px; display: flex; flex-direction: column; gap: var(--s-7); }
+.legal__section { display: flex; flex-direction: column; gap: var(--s-3); }
+.legal__section h2 { font-family: var(--font-display); font-size: clamp(24px, 2.4vw, 32px); font-weight: 600; letter-spacing: -0.015em; color: var(--color-text); }
+.legal__section p { font-size: 17px; line-height: 1.65; color: var(--pp-muted); }
+.legal__section a { color: var(--pp-red-700); }
+.legal__updated { padding-top: var(--s-5); border-top: 1px solid var(--color-divider); font-family: var(--font-mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--pp-muted); }

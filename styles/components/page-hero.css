@@ -1,0 +1,33 @@
+/* Inner-page hero: copy left, animated LogoMark right. Scroll lifts the copy (--p from data-progress="exit"). */
+.phero { --p: 0; position: relative; overflow: hidden; background: #000; color: #F5F5F7; }
+.phero__bg {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 55% 60% at 78% 50%, rgba(233, 11, 0, .18), transparent 70%),
+    radial-gradient(ellipse 40% 40% at 10% 100%, rgba(251, 96, 2, .07), transparent 70%);
+}
+.phero__inner {
+  position: relative;
+  display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr); align-items: center; gap: var(--s-7);
+  padding-block: clamp(40px, 5vw, 72px) clamp(56px, 6vw, 96px);
+}
+.phero__copy {
+  display: flex; flex-direction: column; gap: var(--s-5); max-width: 720px;
+  transform: translate3d(0, calc(var(--p) * -120px), 0); opacity: calc(1 - var(--p) * 1.4);
+}
+.phero__eyebrow { display: flex; align-items: center; gap: var(--s-3); font-family: var(--font-mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--pp-grey-2); }
+.phero__led { width: 6px; height: 6px; border-radius: 50%; background: var(--pp-yellow); box-shadow: 0 0 0 3px rgba(233, 11, 0, .35); animation: led 2.4s ease-in-out infinite; }
+@keyframes led { 50% { box-shadow: 0 0 0 6px rgba(233, 11, 0, .12); } }
+.phero__title { font-family: var(--font-display); font-weight: 600; font-size: clamp(42px, 6vw, 84px); line-height: .98; letter-spacing: -0.032em; text-wrap: balance; }
+.phero__lede { max-width: 54ch; font-size: var(--fs-lede); line-height: 1.5; color: var(--pp-grey-2); text-wrap: pretty; }
+.phero .btn-row { margin-top: var(--s-3); }
+.phero__art { display: flex; justify-content: center; align-items: center; }
+.phero__art .logo-mark { width: min(440px, 34vw); }
+
+@media (max-width: 900px) {
+  .phero__inner { grid-template-columns: minmax(0, 1fr); min-height: 0; gap: 0; }
+  .phero__inner { padding-block: var(--s-7) var(--s-8); }
+  .phero__art { position: absolute; right: -22%; top: 50%; margin-top: -36vw; opacity: .28; z-index: 0; }
+  .phero__art .logo-mark { width: 72vw; }
+  .phero__copy { position: relative; z-index: 1; }
+}

@@ -1,0 +1,87 @@
+/* ==========================================================================
+   Planck Play brand theme — layered on the Industry design system.
+   Visual language: Apple Pro product pages (black ground, light grey bands,
+   huge tight headlines, generous and consistent spacing).
+   ========================================================================== */
+
+:root {
+  /* Brand */
+  --pp-red: #E90B00; --pp-red-600: #C20900; --pp-red-700: #870100;
+  --pp-orange: #FB6002; --pp-orange-300: #FFA366; --pp-yellow: #FCCC27;
+  --pp-ink: #000000; --pp-ink-1: #0A0A0B; --pp-ink-2: #161618; --pp-ink-3: #1D1D1F; --pp-ink-4: #2A2A2D;
+  --pp-paper: #F5F5F7; --pp-paper-2: #FBFBFD;
+  --pp-grey: #86868B; --pp-grey-2: #A1A1A6; --pp-grey-3: #6E6E73;
+  --pp-gradient: linear-gradient(92deg, #FFFFFF 0%, #FFFFFF 30%, #FFB199 62%, #FB6002 100%);
+  --pp-gradient-warm: linear-gradient(135deg, #FF3B2E 0%, #E90B00 45%, #FB6002 100%);
+
+  /* Accent ramp (overrides the Industry steel-blue) */
+  --color-accent: var(--pp-red); --color-accent-100: #FDECEA; --color-accent-200: #F9CFCA; --color-accent-300: #F29C92;
+  --color-accent-400: #EE5A4C; --color-accent-500: #E90B00; --color-accent-600: #C20900; --color-accent-700: #870100;
+  --color-accent-800: #5C0100; --color-accent-900: #2E0100; --color-accent-2: var(--pp-orange);
+
+  /* Type — SF Pro on Apple devices, Inter everywhere else (see fonts.css) */
+  --font-sans: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter PP', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-display: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter PP', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-body: var(--font-sans);
+  --font-heading: var(--font-display);
+  --font-heading-weight: 600;
+  --font-mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+  --fs-hero: clamp(56px, 10vw, 152px);
+  --fs-h1: clamp(44px, 7vw, 96px);
+  --fs-h2: clamp(40px, 5.6vw, 80px);
+  --fs-h3: clamp(28px, 3vw, 40px);
+  --fs-eyebrow: clamp(19px, 1.6vw, 24px);
+  --fs-lede: clamp(18px, 1.5vw, 22px);
+  --fs-body: 17px;
+
+  /* Spacing scale — every gap on the site comes from here */
+  --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px; --s-5: 24px; --s-6: 32px;
+  --s-7: 48px; --s-8: 64px; --s-9: 96px; --s-10: 128px;
+  --section-y: clamp(96px, 12vw, 176px);     /* vertical padding of every section */
+  --head-gap: clamp(40px, 5vw, 72px);        /* section heading → content */
+  --grid-gap: clamp(16px, 1.6vw, 24px);      /* between cards */
+  --container: 1240px;
+  --container-narrow: 980px;
+  --gutter: clamp(20px, 5vw, 48px);
+  --gnav-h: 60px;
+  --radius-card: 28px; --radius-lg: 36px;
+
+  /* Motion */
+  --ease-out: cubic-bezier(.2, .7, .2, 1);
+  --ease-expo: cubic-bezier(.16, 1, .3, 1);
+
+  /* Default surface = dark */
+  --color-bg: var(--pp-ink-1); --color-surface: var(--pp-ink-2); --color-text: #F5F5F7;
+  --color-divider: rgba(245, 245, 247, .14);
+  --pp-muted: var(--pp-grey-2); --pp-accent-text: var(--pp-orange);
+  --link: var(--pp-orange); --link-hover: var(--pp-orange-300);
+  --pp-card: var(--pp-ink-2); --pp-card-border: rgba(255, 255, 255, .06);
+  --pp-card-shadow: none; --pp-card-shadow-hover: 0 30px 60px rgba(0, 0, 0, .45);
+  --pp-tag: rgba(255, 255, 255, .08); --pp-panel: var(--pp-ink-2);
+}
+
+/* Very large displays: widen the layout so it doesn't float in the middle. */
+@media (min-width: 1920px) { :root { --container: 1440px; --fs-body: 18px; } }
+@media (min-width: 2400px) { :root { --container: 1600px; } }
+
+/* --- Surfaces: put one on a <section> to re-theme everything inside --- */
+.theme-dark, .theme-dark-raised, .theme-black {
+  --color-bg: var(--pp-ink-1); --color-surface: var(--pp-ink-2); --color-text: #F5F5F7;
+  --color-divider: rgba(245, 245, 247, .14); --pp-muted: var(--pp-grey-2); --pp-accent-text: var(--pp-orange);
+  --link: var(--pp-orange); --link-hover: var(--pp-orange-300);
+  --pp-card: var(--pp-ink-2); --pp-card-border: rgba(255, 255, 255, .06); --pp-card-shadow: none;
+  --pp-card-shadow-hover: 0 30px 60px rgba(0, 0, 0, .45); --pp-tag: rgba(255, 255, 255, .08); --pp-panel: var(--pp-ink-2);
+  background-color: var(--color-bg); color: var(--color-text);
+}
+.theme-black { --color-bg: #000; }
+.theme-dark-raised { --color-bg: var(--pp-ink-2); --pp-card: var(--pp-ink-3); --pp-panel: var(--pp-ink-3); }
+.theme-paper, .theme-white {
+  --color-bg: var(--pp-paper); --color-surface: #FFFFFF; --color-text: #1D1D1F;
+  --color-divider: rgba(0, 0, 0, .12); --pp-muted: var(--pp-grey-3); --pp-accent-text: var(--pp-red-700);
+  --link: var(--pp-red-700); --link-hover: var(--pp-red);
+  --pp-card: #FFFFFF; --pp-card-border: rgba(0, 0, 0, .04);
+  --pp-card-shadow: 0 2px 12px rgba(0, 0, 0, .04); --pp-card-shadow-hover: 0 30px 60px rgba(0, 0, 0, .12);
+  --pp-tag: rgba(0, 0, 0, .06); --pp-panel: #FFFFFF;
+  background-color: var(--color-bg); color: var(--color-text);
+}
+.theme-white { --color-bg: #FFFFFF; --pp-card: var(--pp-paper); --pp-panel: var(--pp-paper); --pp-card-shadow: none; }

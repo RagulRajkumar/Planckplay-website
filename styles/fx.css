@@ -1,0 +1,43 @@
+/* ==========================================================================
+   Motion layer. Hidden states only apply under html.fx-on (motion enabled),
+   so with JS/motion off everything is simply visible.
+   ========================================================================== */
+.fx-on [data-reveal] {
+  opacity: 0;
+  transform: translate3d(0, 48px, 0);
+  transition: opacity 1s var(--ease-expo), transform 1.2s var(--ease-expo), filter 1s var(--ease-expo), clip-path 1.2s var(--ease-expo);
+  transition-delay: calc(var(--i, 0) * 90ms);
+  will-change: opacity, transform;
+}
+.fx-on [data-reveal="fade"] { transform: none; }
+.fx-on [data-reveal="scale"] { transform: scale(.92); }
+.fx-on [data-reveal="left"] { transform: translate3d(-60px, 0, 0); }
+.fx-on [data-reveal="right"] { transform: translate3d(60px, 0, 0); }
+.fx-on [data-reveal="blur"] { transform: translate3d(0, 24px, 0); filter: blur(12px); }
+.fx-on [data-reveal="mask"] { opacity: 1; transform: none; clip-path: inset(0 0 100% 0); }
+/* Only the mask variant uses clip-path. Applying clip-path: inset(0) to every
+   revealed element clipped anything painted outside its box: descenders of
+   tight display headlines ("g" in "doing") and buttons that lean out of their
+   row on hover (data-magnetic). */
+.fx-on [data-reveal].is-in { opacity: 1; transform: none; filter: none; }
+.fx-on [data-reveal="mask"].is-in { clip-path: inset(0 0 0 0); }
+
+/* Page transitions (router toggles these on #app) */
+/* Opacity only on #app: a transform there would become the containing block for
+   fixed elements (back-to-top, mobile menu) during the transition. */
+#app { transition: opacity 220ms ease; }
+#app.is-leaving { opacity: 0; }
+#app.is-leaving main { transform: translateY(-8px); transition: transform 220ms ease; }
+.fx-on #app.is-entering main { animation: page-in 700ms var(--ease-expo); }
+@keyframes page-in { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+
+/* Words lit by scroll (data-words) */
+.fx-word { display: inline-block; transition: opacity .25s linear; }
+.fx-on .fx-word { opacity: .16; }
+
+[data-magnetic] { transition: transform .45s var(--ease-expo), background-color .2s ease, box-shadow .3s ease; }
+[data-tilt] { transition: transform .6s var(--ease-expo), box-shadow .4s ease; transform-style: preserve-3d; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}

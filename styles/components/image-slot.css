@@ -1,0 +1,13 @@
+.image-slot {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+  padding: 16px; text-align: center;
+  font-family: var(--font-body); font-size: 13px; line-height: 1.4;
+  color: var(--pp-grey);
+  background: color-mix(in srgb, currentColor 4%, transparent);
+}
+.image-slot--filled { object-fit: cover; padding: 0; }
+.image-slot .icon { opacity: .7; }
+
+.image-slot--art .art__icon { right: 50%; bottom: 50%; transform: translate(50%, 50%); }
+.image-slot--art .art__icon .icon { width: clamp(72px, 9vw, 110px); }

@@ -1,0 +1,30 @@
+/* Animated logo mark: float + 3D turn, orbit rings, breathing glow. */
+.logo-mark { position: relative; aspect-ratio: 1; perspective: 1400px; pointer-events: none; }
+.logo-mark--sm { width: 120px; } .logo-mark--md { width: 260px; } .logo-mark--lg { width: min(420px, 80vw); } .logo-mark--xl { width: min(560px, 86vw); }
+.logo-mark__glow {
+  position: absolute; inset: 4%; border-radius: 50%; filter: blur(40px);
+  background: radial-gradient(circle, rgba(233, 11, 0, .5) 0%, rgba(251, 96, 2, .16) 36%, transparent 66%);
+  animation: lm-breathe 5.2s ease-in-out infinite alternate;
+}
+.logo-mark__rings { position: absolute; inset: 0; transform-style: preserve-3d; }
+.logo-mark__ring { position: absolute; border-radius: 50%; }
+.logo-mark__ring span { position: absolute; border-radius: 50%; }
+.logo-mark__ring--a { inset: 2%; border: 1px solid rgba(245, 245, 247, .16); animation: lm-ring-a 22s linear infinite; }
+.logo-mark__ring--a span { top: -3px; left: calc(50% - 3px); width: 6px; height: 6px; background: var(--pp-orange); box-shadow: 0 0 14px 4px rgba(251, 96, 2, .7); }
+.logo-mark__ring--b { inset: 13%; border: 1px solid rgba(245, 245, 247, .1); animation: lm-ring-b 31s linear infinite; }
+.logo-mark__ring--b span { bottom: -2px; left: calc(50% - 2px); width: 4px; height: 4px; background: var(--pp-yellow); box-shadow: 0 0 10px 3px rgba(252, 204, 39, .6); }
+.logo-mark__tilt { position: absolute; inset: 14%; transform-style: preserve-3d; transition: transform .2s linear; }
+.logo-mark__float { position: absolute; inset: 0; transform-style: preserve-3d; animation: lm-float 9s ease-in-out infinite; }
+.logo-mark__img { position: absolute; left: 0; top: 50%; width: 100%; max-width: none; height: auto; transform: translateY(-50%); filter: drop-shadow(0 30px 60px rgba(0, 0, 0, .55)); }
+
+@keyframes lm-breathe { from { transform: scale(.92); opacity: .7; } to { transform: scale(1.08); opacity: 1; } }
+@keyframes lm-ring-a { from { transform: rotateX(74deg) rotateY(-16deg) rotateZ(0); } to { transform: rotateX(74deg) rotateY(-16deg) rotateZ(360deg); } }
+@keyframes lm-ring-b { from { transform: rotateX(64deg) rotateY(28deg) rotateZ(360deg); } to { transform: rotateX(64deg) rotateY(28deg) rotateZ(0); } }
+@keyframes lm-float {
+  0%, 100% { transform: translateY(0) rotateY(-14deg) rotateX(6deg) rotateZ(-2deg); }
+  50% { transform: translateY(-14px) rotateY(16deg) rotateX(-6deg) rotateZ(2deg); }
+}
+.fx-on .logo-mark .logo-mark__float { animation-play-state: running; }
+html:not(.fx-on) .logo-mark__glow, html:not(.fx-on) .logo-mark__ring, html:not(.fx-on) .logo-mark__float { animation: none; }
+html:not(.fx-on) .logo-mark__ring--a { transform: rotateX(74deg) rotateY(-16deg); }
+html:not(.fx-on) .logo-mark__ring--b { transform: rotateX(64deg) rotateY(28deg); }

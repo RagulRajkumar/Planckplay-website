@@ -1,0 +1,54 @@
+/* Splash: a quiet brand loader. The mark sits inside a hairline ring that
+   fills with real loading progress; the wordmark and a percentage sit below.
+   When loading completes, the content settles and the panel lifts away.
+   Markup is static in index.html so it paints on the first frame. */
+html.splash-active { overflow: hidden; }
+.splash {
+  position: fixed; inset: 0; z-index: 1000; display: grid; place-items: center;
+  background: radial-gradient(ellipse 60% 50% at 50% 46%, #140806 0%, #050505 55%, #000 100%);
+  color: #F5F5F7; cursor: pointer;
+  clip-path: inset(0 0 0 0);
+  transition: clip-path 850ms cubic-bezier(.76, 0, .24, 1);
+}
+.no-splash .splash { display: none; }
+.splash__stage { display: flex; flex-direction: column; align-items: center; gap: 26px; }
+
+.splash__emblem { position: relative; width: clamp(104px, 11vw, 132px); aspect-ratio: 1; }
+.splash__ring { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.splash__ring circle { fill: none; stroke-width: 1.2; }
+.splash__ring-track { stroke: rgba(255, 255, 255, .1); }
+.splash__ring-fill {
+  stroke: #FB6002; stroke-linecap: round; stroke-dasharray: 351.86; stroke-dashoffset: 351.86;
+  filter: drop-shadow(0 0 6px rgba(251, 96, 2, .55));
+}
+.splash__mark { position: absolute; left: 22%; top: 22%; width: 56%; height: 56%; object-fit: contain; }
+.splash__word { height: clamp(14px, 1.6vw, 18px); width: auto; opacity: .95; }
+.splash__pct {
+  font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em; color: rgba(245, 245, 247, .45);
+  font-variant-numeric: tabular-nums; min-width: 5ch; text-align: center;
+}
+.splash__pct b { font-weight: 400; color: rgba(245, 245, 247, .8); }
+.splash__foot {
+  position: absolute; left: 0; right: 0; bottom: 0; display: flex; justify-content: space-between; gap: 16px;
+  padding: max(24px, env(safe-area-inset-bottom)) clamp(20px, 5vw, 48px);
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: rgba(245, 245, 247, .38);
+}
+@media (max-width: 520px) { .splash__foot span:last-child { display: none; } .splash__foot { justify-content: center; } }
+
+/* Entrance */
+.splash.is-playing .splash__emblem { animation: sp-in 900ms cubic-bezier(.16, 1, .3, 1) both; }
+.splash.is-playing .splash__word { animation: sp-rise 900ms 180ms cubic-bezier(.16, 1, .3, 1) both; }
+.splash.is-playing .splash__pct, .splash.is-playing .splash__foot { animation: sp-fade 700ms 320ms ease both; }
+@keyframes sp-in { from { opacity: 0; transform: scale(.9); } to { opacity: 1; transform: none; } }
+@keyframes sp-rise { from { opacity: 0; transform: translateY(10px); } to { opacity: .95; transform: none; } }
+@keyframes sp-fade { from { opacity: 0; } to { opacity: 1; } }
+
+/* Complete: the ring closes, the mark settles, then the panel lifts. */
+.splash.is-done .splash__ring-fill { stroke: #FF7A2E; }
+.splash.is-out { clip-path: inset(0 0 100% 0); }
+.splash.is-out .splash__stage, .splash.is-out .splash__foot { transition: opacity 400ms ease, transform 850ms cubic-bezier(.76, 0, .24, 1); opacity: 0; transform: translateY(-24px); }
+
+/* Reduced motion: no movement, a short fade out */
+.splash.is-reduced .splash__stage > *, .splash.is-reduced .splash__foot { animation: none; }
+.splash.is-reduced.is-out { clip-path: none; opacity: 0; transition: opacity 300ms ease; }
+.splash.is-reduced.is-out .splash__stage, .splash.is-reduced.is-out .splash__foot { transform: none; }
