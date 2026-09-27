@@ -113,7 +113,7 @@
     { index: 'C-02', name: 'Mechanical', icon: 'compass',
       tags: [ { label: '3D CAD' }, { label: '2D drawings with GD&T' }, { label: 'Reverse engineering' }, { label: 'Renders' } ] },
     { index: 'C-03', name: 'Software', icon: 'code',
-      tags: [ { label: 'Web applications' }, { label: 'Backend services and APIs' }, { label: 'Databases' }, { label: 'Mobile apps', pending: true }, { label: 'UI and UX design' }, { label: 'Automation' }, { label: 'Maintenance and support' } ] },
+      tags: [ { label: 'Web applications' }, { label: 'Backend services and APIs' }, { label: 'Databases' }, { label: 'Mobile apps', pending: true }, { label: 'UI and UX design' }, { label: 'Automation' }] },
     { index: 'C-04', name: 'Quality engineering', icon: 'check',
       tags: [ { label: 'Web test automation' }, { label: 'API test automation' }, { label: 'Mobile test automation' }, { label: 'Test strategy' }, { label: 'Regression testing' } ] },
     { index: 'C-05', name: 'Data and AI', icon: 'spark', pending: true,

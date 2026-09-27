@@ -103,7 +103,7 @@
 .hl__plus { position: absolute; right: 28px; bottom: 28px; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,.12); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); transition: background-color .3s ease, transform .5s var(--ease-expo); }
 .hl__card:hover .hl__plus { background: var(--pp-red); transform: rotate(45deg); }
 .hl__controls { display: flex; justify-content: center; align-items: center; gap: var(--s-4); margin-top: var(--s-6); }
-.hl__dots { display: flex; gap: 10px; padding: 16px 20px; border-radius: 999px; background: rgba(255,255,255,.1); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); }
+.hl__dots { display: flex; gap: 10px; padding: 24px 20px; border-radius: 999px; background: rgba(255,255,255,.1); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); }
 .hl__dot { position: relative; width: 8px; height: 8px; padding: 0; border: 0; border-radius: 999px; background: rgba(255,255,255,.4); cursor: pointer; overflow: hidden; transition: width .5s var(--ease-expo), background-color .3s ease; }
 .hl__dot.is-active { width: 44px; background: rgba(255,255,255,.3); }
 .hl__dot i { position: absolute; inset: 0; background: #fff; transform-origin: left; transform: scaleX(0); }
