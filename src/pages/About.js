@@ -13,8 +13,8 @@
       ${PageHero({ eyebrow: 'About Planck Play', title: 'Different minds. One engineering vision.', lede: company.oneLine })}
 
       ${Section({ id: 'story', theme: 'paper', children: html`
-        <div data-reveal>${SectionHeader({ index: '01', label: 'Who we are', title: 'Eight engineers and specialists, one team',
-          lede: 'Planck Play was founded in Coimbatore by eight engineers and specialists with complementary expertise. We started it to take on hard technical problems end to end.' })}</div>
+        <div data-reveal>${SectionHeader({ index: '01', label: 'Who we are', title: 'Specialists in every discipline, one team',
+          lede: 'Planck Play brings together specialists with complementary expertise. We started the company to take on complex technical challenges and deliver end-to-end solutions.' })}</div>
         <div class="tag-list about-disciplines" data-reveal>${disciplines.map((d) => html`<span class="tech-tag">${d}</span>`)}</div>` })}
 
       ${Section({ id: 'commitments', theme: 'dark', children: html`

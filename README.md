@@ -21,7 +21,7 @@ motion tied to scroll position.
 
 **Home, top to bottom:**
 1. Brand loader: the mark inside a hairline ring that fills with real loading progress, the wordmark and a percentage; when loading completes it lifts away (min ~1.2 s, capped at 4 s).
-2. Hero ("Engineering What's Next."): copy and proof points on the left, the 3D mark on the right.
+2. Hero ("Engineering What's Next."): copy and calls to action on the left, the 3D mark on the right.
    - A circuit-trace canvas that lights up near the cursor.
    - A 3D logo you can drag to spin or click to send a pulse through the traces.
    - Capability chips orbit the logo.

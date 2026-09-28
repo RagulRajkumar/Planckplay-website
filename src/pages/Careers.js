@@ -13,7 +13,7 @@
     current: 'careers',
     children: html`
       ${PageHero({ eyebrow: 'Careers', title: 'Build real systems with us.',
-        lede: 'Join our engineering team in Coimbatore. Open roles, a paid Graduate Engineer Trainee programme and internships for engineering students.' })}
+        lede: 'Join our engineering team. Open roles, a paid Graduate Engineer Trainee programme and internships for engineering students.' })}
 
       ${Section({ id: 'tracks', theme: 'paper', children: html`
         <div data-reveal>${SectionHeader({ index: '01', label: 'Ways to join', title: 'Three ways in' })}</div>

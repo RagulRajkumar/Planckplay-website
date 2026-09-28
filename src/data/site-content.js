@@ -11,8 +11,8 @@
   // later means editing one function, not this file.
   const pages = [
     { key: 'home', label: 'Home', url: '/',
-      title: 'Planck Play LLP | R&D-led engineering company, Coimbatore',
-      meta: 'Planck Play takes hard technical problems from research and proof-of-concept to production-ready electronics, mechanical designs and software. Based in Coimbatore, India.' },
+      title: 'Planck Play LLP | R&D-led engineering company',
+      meta: 'Planck Play takes hard technical problems from research and proof-of-concept to production-ready electronics, mechanical designs and software.' },
     { key: 'solutions', label: 'Solutions', url: '/solutions',
       title: 'Engineering solutions: R&D, embedded, CAD, software | Planck Play',
       meta: 'Seven ways to engage our engineers, from feasibility studies and prototypes to ERP, CRM and factory systems, end-to-end software and dedicated engineering teams.' },
@@ -26,11 +26,11 @@
       title: 'Industries we engineer for | Planck Play',
       meta: 'Pumps and motors, machinery, hardware startups, technology companies and research institutions: the everyday problems we solve in each, explained in plain language.' },
     { key: 'about', label: 'About', url: '/about',
-      title: 'About Planck Play LLP | Engineers in Coimbatore',
-      meta: 'Eight engineers and specialists who founded an R&D-led engineering company in Coimbatore. Our mission, engineering philosophy and how we work with clients.' },
+      title: 'About Planck Play LLP',
+      meta: 'The specialists behind an R&D-led engineering company. Our mission, engineering philosophy and how we work with clients.' },
     { key: 'careers', label: 'Careers', url: '/careers',
       title: 'Careers: engineering jobs and paid trainee programme | Planck Play',
-      meta: 'Join our engineering team in Coimbatore. Open roles, a paid Graduate Engineer Trainee programme and internships for engineering students.' },
+      meta: 'Join our engineering team. Open roles, a paid Graduate Engineer Trainee programme and internships for engineering students.' },
     { key: 'contact', label: 'Contact', url: '/contact',
       title: 'Contact us or submit an RFP | Planck Play',
       meta: 'Describe your technical problem or upload an RFP, drawings or a specification, and an engineer will get back to you.' },
@@ -225,14 +225,13 @@
   // placeholder text ever reaches the live site.
   const company = {
     name: 'Planck Play LLP',
-    oneLine: 'An R&D-led engineering company in Coimbatore. Electronics, firmware, mechanical design and software, from first research to deployment.',
+    oneLine: 'An R&D-led engineering company. Electronics, firmware, mechanical design and software, from first research to deployment.',
     email: 'sales@planckplay.com',
     careersEmail: 'sales@planckplay.com',
     website: 'https://planckplay.com',
     phone: '',
     whatsapp: '',
-    address: '',                      // street address; the city line below is always shown
-    city: 'Coimbatore, Tamil Nadu, India',
+    address: '',                      // street address; shown in the footer and on Contact once filled in
     legal: 'Planck Play LLP, a limited liability partnership registered in India.',
     llpin: '', gstin: '', udyam: '',
     social: [ { label: 'LinkedIn', href: '' }, { label: 'YouTube', href: '' }, { label: 'GitHub', href: '' } ],

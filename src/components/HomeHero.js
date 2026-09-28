@@ -13,7 +13,7 @@
   const C = PP.homeContent;
 
   function HomeHero() {
-    const { hero, orbit, facts } = C;
+    const { hero, orbit } = C;
     const wide = window.innerWidth >= 960, rx0 = wide ? 44 : 40;
     return html`
       <section id="top" class="hhero" data-behavior="home-hero" data-progress="exit">
@@ -21,7 +21,7 @@
         <div class="hhero__floor" aria-hidden="true"></div>
         <div class="container hhero__grid">
           <div class="hhero__copy">
-            <p class="hhero__eyebrow" data-rise><span class="hhero__led" aria-hidden="true"></span>${hero.eyebrow}</p>
+            ${hero.eyebrow ? html`<p class="hhero__eyebrow" data-rise><span class="hhero__led" aria-hidden="true"></span>${hero.eyebrow}</p>` : ''}
             <h1 class="hhero__title">
               <span data-rise>${hero.line1}</span>
               <span data-rise class="gradient-text">${hero.line2.replace(/\.$/, '')}<span class="hhero__dot">.</span></span>
@@ -31,9 +31,6 @@
               <a href="#highlights" class="btn btn-primary btn-pill btn-lg" data-magnetic>Explore solutions</a>
               <a href="${PP.href('contact')}" class="btn btn-secondary btn-pill btn-lg" data-magnetic>Talk to us</a>
             </div>
-            <dl class="hhero__facts" data-rise>
-              ${facts.map((f) => html`<div><dt>${f.value}</dt><dd>${f.label}</dd></div>`)}
-            </dl>
           </div>
           <div class="hhero__stage" data-stage>
             <div class="hhero__glow" aria-hidden="true" data-glow></div>

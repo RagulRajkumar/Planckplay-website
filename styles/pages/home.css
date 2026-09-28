@@ -29,10 +29,6 @@
 .hhero__dot { -webkit-text-fill-color: var(--pp-orange); color: var(--pp-orange); }
 .hhero__lede { max-width: 30ch; font-size: var(--fs-lede); line-height: 1.5; color: #C7C8CC; text-wrap: pretty; }
 .hhero .btn-row { margin-top: var(--s-2); }
-.hhero__facts { display: flex; flex-wrap: wrap; gap: var(--s-5) var(--s-7); margin: var(--s-5) 0 0; padding-top: var(--s-5); border-top: 1px solid rgba(255,255,255,.1); }
-.hhero__facts div { display: flex; flex-direction: column; gap: 2px; }
-.hhero__facts dt { font-family: var(--font-display); font-size: 28px; font-weight: 600; letter-spacing: -0.022em; color: #F5F5F7; }
-.hhero__facts dd { margin: 0; font-size: 13px; color: var(--pp-grey-2); }
 
 .hhero__stage {
   position: relative; width: 100%; max-width: 660px; aspect-ratio: 1; justify-self: center;
@@ -70,9 +66,6 @@
   .hhero__grid { grid-template-columns: minmax(0, 1fr); gap: var(--s-7); }
   .hhero__copy { align-items: center; text-align: center; }
   .hhero .btn-row { justify-content: center; }
-  .hhero__facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s-4); width: 100%; max-width: 420px; text-align: center; }
-  .hhero__facts dt { font-size: 24px; }
-  .hhero__facts dd { font-size: 12px; line-height: 1.35; }
   .hhero__lede { max-width: 34ch; }
   .hhero__stage { max-width: 520px; }
   .hhero__ring { left: 10%; right: 10%; }
@@ -302,8 +295,6 @@
 }
 @media (min-width: 1920px) { .hhero__title { font-size: 92px; } .hhero__stage { max-width: 760px; } }
 
-/* Hero facts stay on one row down to tablet widths */
-@media (min-width: 960px) { .hhero__facts { gap: var(--s-4) var(--s-6); } .hhero__facts div { white-space: nowrap; } }
 
 /* Landscape phones: short screens get a two-column hero sized to the height */
 @media (max-width: 959px) and (orientation: landscape) and (max-height: 540px) {
@@ -313,7 +304,6 @@
   .hhero .btn-row { justify-content: flex-start; }
   .hhero__title { font-size: clamp(34px, 10vh, 52px); }
   .hhero__lede { font-size: 16px; }
-  .hhero__facts { justify-content: flex-start; max-width: none; text-align: left; margin-top: var(--s-2); padding-top: var(--s-3); }
   .hhero__stage { max-width: min(78vh, 360px); }
   .hhero__chip { font-size: 11px; padding: 6px 10px; }
   .phero__inner { padding-block: var(--s-6) var(--s-7); }

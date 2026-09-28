@@ -6,16 +6,10 @@
 
   Object.assign(PP.homeContent, {
     hero: {
-      eyebrow: 'Planck Play LLP · Coimbatore, India',
+      eyebrow: '',
       line1: 'Engineering', line2: 'What’s Next.',
       lede: 'Next-generation engineering, technology, IoT and digital solutions built to solve real-world problems.',
     },
-    /** Proof points under the hero CTAs. */
-    facts: [
-      { value: '8', label: 'Founding engineers' },
-      { value: '6', label: 'Disciplines, one team' },
-      { value: '72h', label: 'To a written proposal' },
-    ],
     /** Chips orbiting the 3D mark: [wide label, short label, target] */
     orbit: [
       ['Product Engineering', 'Product', '#highlights'], ['IoT & Embedded', 'IoT', '#iot'],

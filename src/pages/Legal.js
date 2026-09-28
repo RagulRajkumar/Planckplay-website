@@ -15,7 +15,7 @@
     privacy: {
       eyebrow: 'Legal', title: 'Privacy policy.', lede: `How ${company.name} collects, uses and protects personal data submitted through this website.`,
       sections: [
-        ['Who we are', [html`${company.name} ("Planck Play", "we") is an engineering company based in ${company.city}. For any question about this policy or your data, write to ${mail}.`]],
+        ['Who we are', [html`${company.name} ("Planck Play", "we") is an engineering company. For any question about this policy or your data, write to ${mail}.`]],
         ['What we collect', [
           'We only collect what you choose to send us: the details you include in the email the contact form prepares, or in any email you send us — typically your name, work email, company, phone number, a description of your technical problem, and any files you attach such as an RFP or drawings.',
           'This website does not use cookies, analytics, advertising pixels or any other tracking technology.',
@@ -41,7 +41,7 @@
         ['Intellectual property', ['The Planck Play name and logo, and the text, graphics and code of this website, belong to Planck Play or its licensors. You may view and share pages for personal or internal business purposes; any other reproduction needs our written permission.']],
         ['What you send us', ['When you submit an enquiry or files, you confirm you are entitled to share them. We treat submitted technical information as confidential and offer an NDA before the first technical conversation.']],
         ['Liability', ['We work to keep the website accurate and available but provide it "as is", without warranties. To the extent permitted by law, Planck Play is not liable for any loss arising from use of, or reliance on, the website.']],
-        ['Governing law', [`These terms are governed by the laws of India. Courts at ${company.city.split(',')[0]} have jurisdiction over any dispute relating to this website.`]],
+        ['Governing law', [`These terms are governed by the laws of India.`]],
       ],
     },
     cookies: {

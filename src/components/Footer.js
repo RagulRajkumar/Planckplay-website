@@ -27,7 +27,7 @@
                 ${known(company.email) ? html`<li>${icon('mail', { size: 16 })}<a href="mailto:${company.email}">${company.email}</a></li>` : ''}
                 ${known(company.phone) ? html`<li>${icon('phone', { size: 16 })}<a href="tel:${company.phone.replace(/\s/g, '')}">${company.phone}</a></li>` : ''}
                 ${known(company.whatsapp) ? html`<li>${icon('messageCircle', { size: 16 })}<a href="https://wa.me/${company.whatsapp.replace(/\D/g, '')}" rel="noopener">${company.whatsapp}</a></li>` : ''}
-                <li>${icon('mapPin', { size: 16 })}<span>${known(company.address) ? `${company.address}, ` : ''}${company.city}</span></li>
+                ${known(company.address) ? html`<li>${icon('mapPin', { size: 16 })}<span>${company.address}</span></li>` : ''}
               </ul>
               ${social.length ? html`<div class="footer__social">${social.map((s) => html`<a href="${s.href}" rel="noopener" target="_blank">${s.label} ↗</a>`)}</div>` : ''}
             </div>

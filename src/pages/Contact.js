@@ -28,7 +28,7 @@
             ${known(company.email) ? html`<li>${icon('mail', { size: 18, color: 'var(--pp-orange)' })}<a href="mailto:${company.email}">${company.email}</a></li>` : ''}
             ${known(company.phone) ? html`<li>${icon('phone', { size: 18, color: 'var(--pp-orange)' })}<a href="tel:${company.phone.replace(/\s/g, '')}">${company.phone}</a></li>` : ''}
             ${known(company.whatsapp) ? html`<li>${icon('messageCircle', { size: 18, color: 'var(--pp-orange)' })}<a href="https://wa.me/${company.whatsapp.replace(/\D/g, '')}" rel="noopener">WhatsApp ${company.whatsapp}</a></li>` : ''}
-            <li class="top">${icon('mapPin', { size: 18, color: 'var(--pp-orange)' })}<span>${known(company.address) ? `${company.address}, ` : ''}${company.city}</span></li>
+            ${known(company.address) ? html`<li class="top">${icon('mapPin', { size: 18, color: 'var(--pp-orange)' })}<span>${company.address}</span></li>` : ''}
           </ul>
           <div class="contact-promises">
             <p><strong>1 working day</strong> to a reply from an engineer</p>
