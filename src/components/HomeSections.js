@@ -3,16 +3,15 @@
  * FX engine (data-progress / data-parallax / data-reveal / data-words) and CSS.
  *   Statement      pinned, words light up as you scroll
  *   IoTFlow        pinned "Connect Everything." — nodes light in sequence (image 1)
- *   ZoomReveal     a realistic circuit board in a viewer: switch between the
- *                  assembled board, its copper and its silkscreen; a
- *                  plain-language legend highlights each chip on the board
+ *   ZoomReveal     the circuit board as a pinned 3D model: it tilts, comes
+ *                  apart into its layers and names its parts as you scroll
  *   SoftwareShowcase  layered browser / phone / terminal with parallax depth
  *   ApproachPinned pinned four-stage sequence with a giant counter
  *   IndustryCarousel  horizontal snap carousel with prev / next
  */
 (() => {
   'use strict';
-  const { html, icon, href, defineBehavior, motionEnabled, ArtPanel, PcbArt } = PP;
+  const { html, icon, href, defineBehavior, motionEnabled, ArtPanel, Pcb3D } = PP;
   const pad = (n) => String(n).padStart(2, '0');
 
   const Statement = ({ text }) => html`
@@ -54,60 +53,26 @@
     { key: 'flash', name: 'FLASH', title: 'Memory', text: 'Stores readings, logs and settings, even when power is off.' },
   ];
 
+  /** The scroll story of the 3D board: [kicker, title, text]. */
+  const BOARD_STEPS = [
+    ['Assembled', 'One board, top side.', 'An example of the connected devices we design: power, sensing, wireless and memory around one microcontroller.'],
+    ['Taken apart', 'Every layer, designed.', 'Glass-fibre core, copper, solder mask with gold pads, silkscreen and parts, each one drawn with a purpose.'],
+    ['Copper', 'Routed with intent.', 'Matched signal buses, wide power rails and a ring of stitching vias along the edge to keep noise down.'],
+    ['Parts', 'Chosen for the job.', 'Pick a part below to see what it does. Every part we choose has a second source, so the board can still be built.'],
+  ];
+
   const ZoomReveal = ({ features }) => html`
-    <section id="engineering" class="zoom theme-black" data-behavior="pcb-legend">
+    <section id="engineering" class="zoom theme-black">
       <div class="container zoom__head" data-stagger>
         <p class="kicker">PCB &amp; electronics</p>
         <h2 class="headline headline--xl">Designed down<br>to the trace.</h2>
         <p class="lede">From the first schematic to a board that passes its tests, designed and brought up in-house.</p>
       </div>
-      <div class="container zoom__stage" data-progress="view">
-        <div class="zoom__halo" aria-hidden="true"></div>
-        <div class="zoom__floor" aria-hidden="true"></div>
-        <div class="zoom__reveal" data-reveal="scale">
-          <div class="zoom__bar">
-            <p class="zoom__meta"><span class="zoom__led" aria-hidden="true"></span>Example board, top side</p>
-            <div class="zoom__layers" role="group" aria-label="Board layers">
-              ${[['assembled', 'Assembled'], ['copper', 'Copper'], ['silk', 'Silkscreen']].map(([k, l], i) => html`
-                <button type="button" data-layer-btn="${k}" aria-pressed="${i === 0 ? 'true' : 'false'}">${l}</button>`)}
-            </div>
-          </div>
-          <div class="zoom__frame" data-layer="assembled" data-spotlight>
-            <div class="zoom__board">${PcbArt()}</div>
-          </div>
-        </div>
-      </div>
-      <ul class="container zoom__legend" aria-label="What is on the board" data-stagger>
-        ${BOARD_PARTS.map((b) => html`
-          <li class="zoom__part" tabindex="0" data-part="${b.key}">
-            <span class="zoom__chip">${b.name}</span>
-            <span class="zoom__part-title">${b.title}</span>
-            <span class="zoom__part-text">${b.text}</span>
-          </li>`)}
-      </ul>
+      ${Pcb3D({ parts: BOARD_PARTS, steps: BOARD_STEPS })}
       <div class="container zoom__features" data-stagger>
         ${features.map(([t, d]) => html`<div class="zoom__feature"><h3>${t}</h3><p>${d}</p></div>`)}
       </div>
     </section>`;
-
-  /** Legend hover/focus → that chip (and its callout) lights up. Layer buttons switch the view. */
-  defineBehavior('pcb-legend', (root) => {
-    const frame = root.querySelector('.zoom__frame');
-    const items = Array.from(root.querySelectorAll('.zoom__legend [data-part]'));
-    const layerBtns = Array.from(root.querySelectorAll('[data-layer-btn]'));
-    const set = (key) => { if (key) frame.dataset.focus = key; else delete frame.dataset.focus; items.forEach((i) => i.classList.toggle('is-active', i.dataset.part === key)); };
-    const offs = [];
-    items.forEach((it) => {
-      const on = () => set(it.dataset.part), off = () => set('');
-      ['mouseenter', 'focus'].forEach((ev) => { it.addEventListener(ev, on); offs.push(() => it.removeEventListener(ev, on)); });
-      ['mouseleave', 'blur'].forEach((ev) => { it.addEventListener(ev, off); offs.push(() => it.removeEventListener(ev, off)); });
-    });
-    layerBtns.forEach((b) => {
-      const pick = () => { frame.dataset.layer = b.dataset.layerBtn; layerBtns.forEach((x) => x.setAttribute('aria-pressed', String(x === b))); };
-      b.addEventListener('click', pick); offs.push(() => b.removeEventListener('click', pick));
-    });
-    return () => offs.forEach((f) => f());
-  });
 
   const SoftwareShowcase = ({ list }) => html`
     <section id="software" class="sw theme-paper">

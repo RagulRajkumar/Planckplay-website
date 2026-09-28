@@ -2,7 +2,7 @@
  * ArtPanel — branded generative artwork used where photography is not yet
  * available (highlights, industries). A glowing line icon over layered
  * gradients and a faint engineering grid. Pass `image` to use a real photo.
- * PcbArt — deterministic SVG circuit board (traces, pads, chips, vias).
+ * pcbModel — deterministic circuit board (traces, pads, parts) for Pcb3D.
  */
 (() => {
   'use strict';
@@ -19,19 +19,20 @@
   }
 
   /**
-   * PcbArt — a realistic, engineered circuit board (1600×900 viewBox, always
-   * shown whole). Matte-black solder mask, gold (ENIG) pads, real package
+   * pcbModel — a realistic, engineered circuit board, as data for the 3D
+   * viewer (Pcb3D). Matte-black solder mask, gold (ENIG) pads, real package
    * outlines: a QFP-56 microcontroller, a QFN power IC with exposed pad, a
    * shielded RF module with a meander PCB antenna, SOIC ADC and flash, a
    * crystal, decoupling caps, USB-C, a debug header, power rails, via
    * stitching, fiducials, test points and silkscreen reference designators.
    *
-   * Drawn in layers so a viewer can switch them (set data-layer on an
-   * ancestor): .l-copper (traces, rails, vias), .l-pads (gold), .l-body
-   * (component bodies), .l-silk (outlines, refdes, board text).
-   * Each labelled chip and its callout carry data-part="mcu|pmic|rf|adc|flash".
+   * Returned as separate layers in board coordinates (viewBox = B):
+   * copper (pour, rails, traces, vias, signal pulses), pads (gold), silk
+   * (outlines, refdes, board text), plus `solids`: every component body as a
+   * box ({ x, y, w, h, d, kind, … }) so the viewer can build it in 3D.
+   * Chip pads and silk carry data-part="mcu|pmic|rf|adc|flash".
    */
-  function PcbArt() {
+  function pcbModel() {
     const W = 1600, H = 900, animate = PP.motionEnabled();
     const B = { x: 60, y: 40, w: 1480, h: 820, r: 26 };               // board outline
     const PITCH = 14, P0 = 18.5;                                      // pin pitch, first pin centre
@@ -43,8 +44,8 @@
     const adc = { key: 'adc', x: 230, y: 580, w: 130, h: 170, pkg: 'soic', n: 11, len: 12, name: 'ADC', sub: '24-bit', ref: 'U4' };
     const flash = { key: 'flash', x: 1200, y: 600, w: 124, h: 130, pkg: 'soic', n: 8, len: 12, name: 'FLASH', sub: '128 Mb', ref: 'U5' };
 
-    const copper = [], rails = [], pads = [], bodies = [], silk = [], hot = [];
-    const byPart = { mcu: { pads: [], body: [], silk: [] }, pmic: { pads: [], body: [], silk: [] }, rf: { pads: [], body: [], silk: [] }, adc: { pads: [], body: [], silk: [] }, flash: { pads: [], body: [], silk: [] } };
+    const copper = [], rails = [], pads = [], solids = [], silk = [], hot = [];
+    const byPart = { mcu: { pads: [], silk: [] }, pmic: { pads: [], silk: [] }, rf: { pads: [], silk: [] }, adc: { pads: [], silk: [] }, flash: { pads: [], silk: [] } };
 
     /* ---- Packages ---- */
     function pkgPads(c) {
@@ -60,21 +61,6 @@
       if (c.pkg === 'qfn') out.push(`<rect x="${c.x + 38}" y="${c.y + 38}" width="${c.w - 76}" height="${c.h - 76}" rx="4" class="pcb-pad pcb-pad--thermal"/>`);
       return out.join('');
     }
-    function pkgBody(c) {
-      const cx = c.x + c.w / 2, cy = c.y + c.h / 2;
-      if (c.pkg === 'module') {
-        return `<rect x="${c.x}" y="${c.y}" width="${c.w}" height="${c.h}" rx="6" class="pcb-can"/>
-          <rect x="${c.x + 8}" y="${c.y + 8}" width="${c.w - 16}" height="${c.h - 16}" rx="3" class="pcb-can-lip"/>
-          <circle cx="${c.x + 22}" cy="${c.y + 22}" r="4" class="pcb-can-dot"/>
-          <text x="${cx}" y="${cy - 8}" class="pcb-mark pcb-mark--can">${c.name}</text>
-          <text x="${cx}" y="${cy + 22}" class="pcb-marksub pcb-marksub--can">${c.sub}</text>`;
-      }
-      const main = c === mcu;
-      return `<rect x="${c.x}" y="${c.y}" width="${c.w}" height="${c.h}" rx="${c.pkg === 'qfn' ? 6 : 4}" class="pcb-ic${main ? ' pcb-ic--main' : ''}"/>
-        <circle cx="${c.x + 16}" cy="${c.y + 16}" r="${main ? 5 : 4}" class="pcb-ic-dot"/>
-        <text x="${cx}" y="${cy - (main ? 8 : 8)}" class="pcb-mark${main ? ' pcb-mark--main' : ''}">${c.name}</text>
-        <text x="${cx}" y="${cy + (main ? 30 : 22)}" class="pcb-marksub">${c.sub}</text>`;
-    }
     function pkgSilk(c, refX, refY, anchor = 'start') {
       const m = c.len + 6;
       const o = c.pkg === 'soic' ? { x: c.x - 4, y: c.y - 8, w: c.w + 8, h: c.h + 16 } : { x: c.x - m, y: c.y - m, w: c.w + 2 * m, h: c.h + 2 * m };
@@ -84,9 +70,12 @@
         <circle cx="${o.x - 7}" cy="${o.y - 7}" r="3.5" class="pcb-silk-fill"/>
         <text x="${refX}" y="${refY}" text-anchor="${anchor}" class="pcb-ref">${c.ref}</text>`;
     }
+    // Body heights (d) are in board units, roughly true to the parts (1 mm ≈ 25).
+    const HEIGHT = { qfp: 36, qfn: 22, module: 52, soic: 40 };
     [mcu, pmic, rf, adc, flash].forEach((c) => {
       byPart[c.key].pads.push(pkgPads(c));
-      byPart[c.key].body.push(pkgBody(c));
+      solids.push({ x: c.x, y: c.y, w: c.w, h: c.h, d: HEIGHT[c.pkg], kind: c.pkg === 'module' ? 'can' : 'ic',
+        part: c.key, name: c.name, sub: c.sub, main: c === mcu, r: c.pkg === 'qfn' ? 6 : 4 });
     });
     byPart.mcu.silk.push(pkgSilk(mcu, 924, 312, 'end'));
     byPart.pmic.silk.push(pkgSilk(pmic, 222, 374));
@@ -142,7 +131,7 @@
       pads.push(vert
         ? `<rect x="${x}" y="${y}" width="${w}" height="${e}" rx="1.5" class="pcb-pad"/><rect x="${x}" y="${y + h - e}" width="${w}" height="${e}" rx="1.5" class="pcb-pad"/>`
         : `<rect x="${x}" y="${y}" width="${e}" height="${h}" rx="1.5" class="pcb-pad"/><rect x="${x + w - e}" y="${y}" width="${e}" height="${h}" rx="1.5" class="pcb-pad"/>`);
-      bodies.push(vert ? `<rect x="${x}" y="${y + e}" width="${w}" height="${h - 2 * e}" class="pcb-passive"/>` : `<rect x="${x + e}" y="${y}" width="${w - 2 * e}" height="${h}" class="pcb-passive"/>`);
+      solids.push({ x, y, w, h, d: ref && ref[0] === 'R' ? 10 : 14, kind: ref && ref[0] === 'R' ? 'res' : 'cap', vert });
       if (ref) silk.push(`<text x="${rx}" y="${ry}" class="pcb-ref pcb-ref--sm">${ref}</text>`);
     };
     chipR(646, 296, 20, 10, 'C3', 646, 290); chipR(924, 296, 20, 10, 'C4', 924, 290);
@@ -151,15 +140,15 @@
     chipR(384, 594, 20, 10, 'R1', 410, 603); chipR(384, 612, 20, 10, 'R2', 410, 621);
     // Inductor L1
     pads.push(`<rect x="286" y="370" width="12" height="44" rx="2" class="pcb-pad"/><rect x="322" y="370" width="12" height="44" rx="2" class="pcb-pad"/>`);
-    bodies.push(`<rect x="290" y="368" width="40" height="48" rx="7" class="pcb-inductor"/><circle cx="310" cy="392" r="11" class="pcb-inductor-core"/>`);
+    solids.push({ x: 290, y: 368, w: 40, h: 48, d: 46, kind: 'ind', r: 7 });
     silk.push(`<text x="290" y="436" class="pcb-ref pcb-ref--sm">L1</text>`);
     // Crystal Y1
     pads.push(`<rect x="592" y="252" width="12" height="24" rx="2" class="pcb-pad"/><rect x="640" y="252" width="12" height="24" rx="2" class="pcb-pad"/>`);
-    bodies.push(`<rect x="598" y="250" width="48" height="28" rx="12" class="pcb-metal"/>`);
+    solids.push({ x: 598, y: 250, w: 48, h: 28, d: 20, kind: 'xtal', r: 12 });
     silk.push(`<text x="594" y="242" class="pcb-ref pcb-ref--sm">Y1</text>`);
     // USB-C J2 (overhangs the board edge like the real part)
     pads.push(Array.from({ length: 6 }, (_, i) => `<rect x="${452 + i * 7}" y="800" width="4" height="12" rx="1" class="pcb-pad"/>`).join(''));
-    bodies.push(`<rect x="436" y="810" width="84" height="56" rx="10" class="pcb-metal"/><rect x="452" y="836" width="52" height="16" rx="8" class="pcb-usb-slot"/>`);
+    solids.push({ x: 436, y: 810, w: 84, h: 56, d: 64, kind: 'usb', r: 10 });
     silk.push(`<text x="428" y="826" text-anchor="end" class="pcb-ref">J2</text><text x="428" y="846" text-anchor="end" class="pcb-ref pcb-ref--sm">USB-C</text>`);
     // Debug header J1
     for (let i = 0; i < 12; i++) pads.push(`<rect x="${620 + i * 30}" y="800" width="20" height="20" rx="${i ? 10 : 2}" class="pcb-pad"/><circle cx="${630 + i * 30}" cy="810" r="4.5" class="pcb-drill"/>`);
@@ -187,50 +176,27 @@
       <text x="960" y="130" class="pcb-ref pcb-ref--sm">PP-IOT-01  REV B</text>
       <text x="560" y="142" class="pcb-ref pcb-ref--sm">3V3</text>`);
 
-    /* ---- Callouts (plain-language labels) ---- */
-    const calls = [];
-    const callout = (c, i, ax, ay, tx, ty, anchor, label) => calls.push(`<g class="pcb-call" data-part="${c}" style="--ci:${i}">
-      <path d="M${ax} ${ay} L${tx} ${ty}" class="pcb-call-line"/><circle cx="${ax}" cy="${ay}" r="5" class="pcb-call-dot"/>
-      <text x="${tx}" y="${ty + (ty < ay ? -14 : 34)}" text-anchor="${anchor}" class="pcb-call-text">${label}</text></g>`);
-    callout('pmic', 0, pmic.x - 18, pmic.y - 18, 168, 118, 'start', 'Power management');
-    callout('rf', 1, rf.x + rf.w, rf.y - 6, 1432, 118, 'end', 'Wireless connectivity');
-    callout('adc', 2, adc.x - 4, adc.y + adc.h + 8, 168, 780, 'start', 'Sensor front-end');
-    callout('flash', 3, flash.x + flash.w + 4, flash.y + flash.h + 8, 1432, 780, 'end', 'Data logging');
-    callout('mcu', 4, mcu.x + mcu.w / 2, mcu.y - mcu.len, mcu.x + mcu.w / 2, 120, 'middle', 'Firmware and control');
-
     const pulses = animate ? hot.map((d, i) => `<circle r="4" class="pcb-pulse"><animateMotion dur="${(2.8 + i * 0.35).toFixed(2)}s" begin="${(i * 0.6).toFixed(1)}s" repeatCount="indefinite" path="${d}"/></circle>`).join('') : '';
     const partGroups = (layer) => Object.entries(byPart).map(([k, v]) => `<g data-part="${k}">${v[layer].join('')}</g>`).join('');
 
-    return raw(`<svg class="pcb" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-      <defs>
-        <pattern id="pcb-canvas-dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1" fill="rgba(255,255,255,.06)"/></pattern>
+    // Shared paint servers: rendered once (in a 0×0 SVG) and referenced by every layer.
+    const defs = `<defs>
         <pattern id="pcb-pour" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="10" class="pcb-pour-line"/></pattern>
-        <linearGradient id="pcb-mask" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#141516"/><stop offset="1" stop-color="#0b0b0c"/></linearGradient>
         <linearGradient id="pcb-gold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F1CF7A"/><stop offset="1" stop-color="#B8893A"/></linearGradient>
-        <linearGradient id="pcb-steel" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#B9BDC4"/><stop offset=".5" stop-color="#8B9098"/><stop offset="1" stop-color="#6D727A"/></linearGradient>
-        <filter id="pcb-board-shadow" x="-10%" y="-10%" width="120%" height="130%">
-          <feDropShadow dx="0" dy="26" stdDeviation="26" flood-color="#000" flood-opacity=".85"/>
-          <feDropShadow dx="0" dy="0" stdDeviation="34" flood-color="#E90B00" flood-opacity=".22"/>
-        </filter>
-        <filter id="pcb-part-shadow" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#000" flood-opacity=".7"/></filter>
         <filter id="pcb-glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
         <clipPath id="pcb-board-clip"><rect x="${B.x}" y="${B.y}" width="${B.w}" height="${B.h}" rx="${B.r}"/></clipPath>
-      </defs>
-      <rect width="${W}" height="${H}" fill="url(#pcb-canvas-dots)"/>
-      <rect x="${B.x}" y="${B.y}" width="${B.w}" height="${B.h}" rx="${B.r}" fill="url(#pcb-mask)" class="pcb-board" filter="url(#pcb-board-shadow)"/>
-      <g class="l-copper">
-        <rect x="${B.x}" y="${B.y}" width="${B.w}" height="${B.h}" rx="${B.r}" fill="url(#pcb-pour)" class="pcb-pour" clip-path="url(#pcb-board-clip)"/>
+      </defs>`;
+
+    return {
+      W, H, B, defs, solids,
+      copper: `<rect x="${B.x}" y="${B.y}" width="${B.w}" height="${B.h}" rx="${B.r}" fill="url(#pcb-pour)" class="pcb-pour" clip-path="url(#pcb-board-clip)"/>
         ${rails.map((d) => `<path d="${d}" class="pcb-rail"/>`).join('')}
         ${copper.join('')}
-      </g>
-      <g class="l-pads">${pads.join('')}${partGroups('pads')}</g>
-      <g class="l-body" filter="url(#pcb-part-shadow)">${bodies.join('')}${partGroups('body')}</g>
-      <g class="l-silk">${silk.join('')}${partGroups('silk')}</g>
-      <g class="l-signal" filter="url(#pcb-glow)">${pulses}</g>
-      <rect x="${B.x}" y="${B.y}" width="${B.w}" height="${B.h}" rx="${B.r}" class="pcb-edge"/>
-      <g class="l-calls">${calls.join('')}</g>
-    </svg>`);
+        <g class="l-signal" filter="url(#pcb-glow)">${pulses}</g>`,
+      pads: pads.join('') + partGroups('pads'),
+      silk: silk.join('') + partGroups('silk'),
+    };
   }
 
-  Object.assign(PP, { ArtPanel, PcbArt });
+  Object.assign(PP, { ArtPanel, pcbModel });
 })();

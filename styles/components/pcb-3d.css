@@ -1,0 +1,254 @@
+/* ==========================================================================
+   Pcb3D — the circuit board as a scroll-driven CSS 3D model.
+   --p (0→1) comes from data-progress="pin" on .p3. Everything below is
+   derived from it, so the motion needs no JS beyond the FX engine:
+     --A  tilt into 3D          p .02 → .22
+     --E  explode into layers   p .26 → .48
+     --G  copper lights up      p .50 → .60, fades .76 → .86
+     --C  parts lift + named    p .76 → .92
+   Rule of thumb for CSS 3D: never put opacity, filter or overflow on an
+   element with transform-style: preserve-3d (it flattens). Only on leaves.
+   ========================================================================== */
+.p3 {
+  --p: 0;
+  --a: clamp(0, calc((var(--p) - .02) / .2), 1);
+  --e: clamp(0, calc((var(--p) - .26) / .22), 1);
+  --c: clamp(0, calc((var(--p) - .76) / .16), 1);
+  /* smoothstep, so each phase eases in and out */
+  --A: calc(var(--a) * var(--a) * (3 - 2 * var(--a)));
+  --E: calc(var(--e) * var(--e) * (3 - 2 * var(--e)));
+  --C: calc(var(--c) * var(--c) * (3 - 2 * var(--c)));
+  --G: min(clamp(0, calc((var(--p) - .5) / .1), 1), clamp(0, calc((.86 - var(--p)) / .1), 1));
+  /* Pose: tilt/turn targets and scale at rest → tilted → exploded (phones override) */
+  --tilt: 54deg; --turn: -30deg; --s0: 1; --sA: .88; --sE: .2;
+  --rx: calc(var(--A) * var(--tilt) + var(--C) * 4deg - var(--oy, 0) * 8deg);
+  --rz: calc(var(--A) * var(--turn) + var(--C) * -10deg + var(--ox, 0) * 12deg);
+  position: relative; height: 460vh;
+}
+.p3__sticky {
+  position: sticky; top: var(--gnav-h); height: calc(100vh - var(--gnav-h)); overflow: hidden;
+  display: grid; grid-template-rows: minmax(0, 1fr) auto; grid-template-columns: minmax(0, 1fr);
+}
+.p3__halo {
+  position: absolute; left: 50%; top: 44%; width: min(1400px, 130vw); aspect-ratio: 16 / 9; pointer-events: none;
+  transform: translate(-50%, -50%) scale(calc(.8 + var(--A) * .25)); border-radius: 50%; filter: blur(50px);
+  opacity: calc(.45 + var(--A) * .35 + var(--G) * .2);
+  background: radial-gradient(ellipse 50% 50% at 50% 50%, rgba(233, 11, 0, .3) 0%, rgba(251, 96, 2, .12) 42%, transparent 70%);
+}
+
+/* ---------- Stage + scene ---------- */
+.p3__stage {
+  --bw: min(1000px, 78vw, calc((100vh - var(--gnav-h) - 230px) * 1.6));
+  position: relative; min-height: 0;
+  perspective: calc(var(--bw) * 3.2); perspective-origin: 50% 35%;
+}
+.p3-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+.p3-scene {
+  --k: calc(var(--bw) / var(--bu));                     /* px per board unit */
+  --s: calc(var(--s0) + var(--A) * (var(--sA) - var(--s0)) - var(--E) * var(--sE));
+  /* Centred absolutely: on phones the scene is wider than the screen before it turns. */
+  position: absolute; left: 50%; top: 50%; width: var(--bw); height: calc(var(--bw) * var(--bv) / var(--bu));
+  margin: calc(var(--bw) * var(--bv) / var(--bu) / -2) 0 0 calc(var(--bw) / -2);
+  transform-style: preserve-3d;
+  transform: translate3d(0, calc(var(--E) * var(--bw) * .06), 0)
+    rotateX(var(--rx)) rotateZ(var(--rz)) scale3d(var(--s), var(--s), var(--s));
+}
+.p3-shadow {
+  position: absolute; inset: 4% 2%; border-radius: 40px; pointer-events: none;
+  background: rgba(0, 0, 0, .9); filter: blur(calc(20px + var(--A) * 30px));
+  transform: translateZ(calc(var(--k) * -46)); opacity: calc(.4 + var(--A) * .6);
+}
+
+/* ---------- Boxes: the core slab and every part ---------- */
+.p3-core, .p3-solid { position: absolute; transform-style: preserve-3d; }
+.p3-f { position: absolute; display: block; }
+.p3-f--top { inset: 0; transform: translateZ(calc(var(--d) * var(--k))); border-radius: calc(var(--r) * var(--k)); }
+.p3-f--n { left: 0; right: 0; bottom: 100%; height: calc(var(--d) * var(--k)); transform-origin: bottom; transform: rotateX(-90deg); }
+.p3-f--s { left: 0; right: 0; top: 100%; height: calc(var(--d) * var(--k)); transform-origin: top; transform: rotateX(90deg); }
+.p3-f--e { top: 0; bottom: 0; left: 100%; width: calc(var(--d) * var(--k)); transform-origin: left; transform: rotateY(-90deg); }
+.p3-f--w { top: 0; bottom: 0; right: 100%; width: calc(var(--d) * var(--k)); transform-origin: right; transform: rotateY(90deg); }
+/* Rounded parts: keep the side walls inside the rounded corners */
+.p3-solid .p3-f--n, .p3-solid .p3-f--s { left: calc(var(--r) * var(--k)); right: calc(var(--r) * var(--k)); }
+.p3-solid .p3-f--e, .p3-solid .p3-f--w { top: calc(var(--r) * var(--k)); bottom: calc(var(--r) * var(--k)); }
+
+/* FR-4 core: 1.6 mm slab. Its top face is the matte-black board; edges show the glass-fibre stack. */
+.p3-core { --d: 40; --r: 26; inset: 0; transform: translateZ(calc(var(--d) * var(--k) * -1)); }
+.p3-core > .p3-f--top {
+  background:
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, calc(var(--E) * .018)) 0 2px, transparent 2px 7px),
+    repeating-linear-gradient(-45deg, rgba(255, 255, 255, calc(var(--E) * .018)) 0 2px, transparent 2px 7px),
+    linear-gradient(180deg, #151617, #0b0b0c);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .1);
+}
+/* Edge stripes: mask, copper, FR-4, copper, FR-4, copper, mask (top of the board is where the face meets the top) */
+.p3-core > .p3-f {
+  --fr4: linear-gradient(var(--dir), #0c0c0d 0 7%, #b87a3f 7% 10%, #6d6649 10% 46%, #9c7040 46% 50%, #5d573e 50% 88%, #b87a3f 88% 91%, #0c0c0d 91%);
+}
+.p3-core > .p3-f--s { --dir: 0deg; background: var(--fr4); filter: brightness(.95); }
+.p3-core > .p3-f--n { --dir: 180deg; background: var(--fr4); filter: brightness(.5); }
+.p3-core > .p3-f--e { --dir: 270deg; background: var(--fr4); filter: brightness(.7); }
+.p3-core > .p3-f--w { --dir: 90deg; background: var(--fr4); filter: brightness(.6); }
+
+/* Parts: board-unit geometry from inline --x/--y/--w/--h/--d */
+.p3-solid {
+  left: calc(var(--x) * var(--k)); top: calc(var(--y) * var(--k));
+  width: calc(var(--w) * var(--k)); height: calc(var(--h) * var(--k));
+  --side: #232327; --side2: #151518; --lift: 0;
+  transform: translateZ(calc(var(--lift) * 110 * var(--k)));
+  transition: transform .6s cubic-bezier(.16, 1, .3, 1);
+}
+.p3-solid .p3-f--n, .p3-solid .p3-f--s { background: var(--side); }
+.p3-solid .p3-f--e, .p3-solid .p3-f--w { background: var(--side2); }
+.p3-solid .p3-f { transition: filter .4s ease, box-shadow .4s ease; }
+
+.p3-solid--ic > .p3-f--top {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: calc(var(--k) * 8);
+  background: radial-gradient(120% 90% at 30% 20%, #26262a, #161618 70%);
+  box-shadow: inset 0 0 0 max(1px, calc(var(--k) * 1.5)) rgba(255, 255, 255, .1), inset 0 calc(var(--k) * 2) 0 rgba(255, 255, 255, .06);
+}
+.p3-solid--main > .p3-f--top { box-shadow: inset 0 0 0 max(1px, calc(var(--k) * 2)) rgba(251, 96, 2, .55), inset 0 calc(var(--k) * 2) 0 rgba(255, 255, 255, .06); }
+.p3-mark { font-family: var(--font-display); font-weight: 700; font-size: calc(var(--k) * 30); letter-spacing: .08em; line-height: 1; color: #ECECEE; }
+.p3-solid--main .p3-mark { font-size: calc(var(--k) * 46); }
+.p3-sub { font-family: var(--font-mono); font-size: calc(var(--k) * 15); letter-spacing: .06em; line-height: 1; text-transform: uppercase; color: rgba(236, 236, 238, .55); white-space: nowrap; }
+.p3-dot { position: absolute; left: calc(var(--k) * 12); top: calc(var(--k) * 12); width: calc(var(--k) * 9); aspect-ratio: 1; border-radius: 50%; background: rgba(255, 255, 255, .2); }
+
+.p3-solid--can, .p3-solid--xtal, .p3-solid--usb { --side: #7c8189; --side2: #5d6168; }
+.p3-solid--can > .p3-f--top, .p3-solid--xtal > .p3-f--top, .p3-solid--usb > .p3-f--top {
+  background: linear-gradient(135deg, #cfd3d9 0%, #9a9fa7 45%, #b5b9c0 60%, #767b83 100%);
+  box-shadow: inset 0 0 0 calc(var(--k) * 8) rgba(0, 0, 0, .06), inset 0 0 0 calc(var(--k) * 9.5) rgba(0, 0, 0, .12);
+}
+.p3-solid--can > .p3-f--top { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: calc(var(--k) * 8); }
+.p3-solid--can .p3-mark { color: #2a2c30; font-size: calc(var(--k) * 34); }
+.p3-solid--can .p3-sub { color: rgba(30, 32, 36, .72); }
+.p3-solid--can .p3-dot { background: rgba(0, 0, 0, .28); left: calc(var(--k) * 18); top: calc(var(--k) * 18); }
+.p3-usb-slot { position: absolute; left: 19%; right: 19%; top: 22%; bottom: 22%; border-radius: 999px; background: #0c0c0e; box-shadow: inset 0 0 0 calc(var(--k) * 3) #2a2b2f; }
+
+.p3-solid--cap { --side: #9c8b70; --side2: #7a6c56; }
+.p3-solid--cap > .p3-f--top { background: linear-gradient(90deg, #cfd2d6 0 28%, #b7a17e 28% 72%, #cfd2d6 72%); }
+.p3-solid--res { --side: #1c1c1e; --side2: #121214; }
+.p3-solid--res > .p3-f--top { background: linear-gradient(90deg, #c9ccd0 0 26%, #19191b 26% 74%, #c9ccd0 74%); }
+.p3-solid--vert > .p3-f--top { background-image: linear-gradient(180deg, #cfd2d6 0 28%, #b7a17e 28% 72%, #cfd2d6 72%); }
+.p3-solid--ind { --side: #2b2b2f; --side2: #1b1b1e; }
+.p3-solid--ind > .p3-f--top { background: radial-gradient(circle at 50% 50%, #2e2e33 0 22%, #1c1c1f 23% 34%, #2a2a2e 35%); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .12); }
+
+/* ---------- Flat layers ---------- */
+.p3-layer { position: absolute; inset: 0; transform-style: preserve-3d; pointer-events: none; border-radius: calc(26 * var(--k)); }
+.p3-layer > .pcb { position: absolute; inset: 0; }
+.p3-layer--copper { transform: translateZ(calc(1px + var(--E) * 130 * var(--k))); }
+.p3-layer--mask { transform: translateZ(calc(2px + var(--E) * 250 * var(--k))); background: rgba(10, 10, 11, calc(.12 + var(--E) * .6 - var(--G) * .3)); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, calc(var(--E) * .16)); }
+.p3-layer--silk { transform: translateZ(calc(3px + var(--E) * 360 * var(--k))); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, calc(var(--E) * .1)); }
+.p3-layer--parts { transform: translateZ(calc(3.5px + var(--E) * 480 * var(--k) + var(--C) * 70 * var(--k))); }
+.p3-layer--copper > .pcb {
+  filter: brightness(calc(1 + var(--E) * .4 + var(--G) * 1.5)) saturate(calc(1 + var(--G) * .5))
+    drop-shadow(0 0 calc(var(--G) * 6px) rgba(255, 140, 40, calc(var(--G) * .9)));
+}
+.p3-layer--copper { box-shadow: inset 0 0 0 1px rgba(226, 140, 66, calc(var(--E) * .35 + var(--G) * .4)), 0 0 calc(var(--G) * 60px) rgba(251, 96, 2, calc(var(--G) * .25)); }
+
+/* Layer names: billboards that always face the camera, pinned to the board's
+   top-left corner (the leftmost point on screen at this angle). */
+.p3-label {
+  position: absolute; left: 0; top: 0; transform-origin: 0 0; pointer-events: none;
+  transform: rotateZ(calc(var(--rz) * -1)) rotateX(calc(var(--rx) * -1)) translate(-100%, -50%);
+  opacity: calc(var(--E) * var(--E));
+}
+.p3-label > span {
+  display: flex; align-items: center; gap: 10px; padding-right: 6px; white-space: nowrap;
+  font: 600 14px/1 var(--font-body); letter-spacing: .01em; color: #F5F5F7;
+}
+.p3-label > span::after { content: ""; width: 48px; height: 1px; background: linear-gradient(90deg, rgba(245, 245, 247, .5), rgba(245, 245, 247, .15)); }
+.p3-label > span::before { content: ""; order: 3; width: 6px; height: 6px; margin-left: -6px; border-radius: 50%; background: #FB6002; box-shadow: 0 0 0 3px rgba(251, 96, 2, .2); }
+.p3-layer--copper .p3-label > span { color: #F1B77A; }
+.p3-core > .p3-label { transform: translateZ(calc(var(--d) * var(--k))) rotateZ(calc(var(--rz) * -1)) rotateX(calc(var(--rx) * -1)) translate(-100%, -50%); }
+
+/* Chip names: floating tags above each main part */
+.p3-tag {
+  position: absolute; left: 50%; top: 50%; transform-origin: 0 0; pointer-events: none;
+  transform: translateZ(calc(var(--d) * var(--k) + 2px)) rotateZ(calc(var(--rz) * -1)) rotateX(calc(var(--rx) * -1)) translate(-50%, -100%);
+  opacity: var(--C); transition: opacity .4s ease;
+}
+.p3-tag > span {
+  display: block; position: relative; margin-bottom: 30px; padding: 7px 12px; border-radius: 999px;
+  font: 700 12px/1 var(--font-display); letter-spacing: .1em; color: #0A0A0B; background: #F5F5F7;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .5);
+}
+.p3-tag > span::after { content: ""; position: absolute; left: 50%; top: 100%; width: 1px; height: 30px; background: linear-gradient(rgba(245, 245, 247, .8), rgba(245, 245, 247, 0)); }
+
+/* ---------- Focus a part (parts row): lift it, dim the rest ---------- */
+.p3[data-focus] .p3-solid .p3-f { filter: brightness(.45); }
+.p3[data-focus] .p3-tag { opacity: 0; }
+.p3[data-focus="mcu"] .p3-solid[data-part="mcu"], .p3[data-focus="pmic"] .p3-solid[data-part="pmic"], .p3[data-focus="rf"] .p3-solid[data-part="rf"],
+.p3[data-focus="adc"] .p3-solid[data-part="adc"], .p3[data-focus="flash"] .p3-solid[data-part="flash"] { --lift: 1; }
+.p3[data-focus="mcu"] [data-part="mcu"] .p3-f, .p3[data-focus="pmic"] [data-part="pmic"] .p3-f, .p3[data-focus="rf"] [data-part="rf"] .p3-f,
+.p3[data-focus="adc"] [data-part="adc"] .p3-f, .p3[data-focus="flash"] [data-part="flash"] .p3-f { filter: none; }
+.p3[data-focus="mcu"] [data-part="mcu"] .p3-f--top, .p3[data-focus="pmic"] [data-part="pmic"] .p3-f--top, .p3[data-focus="rf"] [data-part="rf"] .p3-f--top,
+.p3[data-focus="adc"] [data-part="adc"] .p3-f--top, .p3[data-focus="flash"] [data-part="flash"] .p3-f--top { box-shadow: inset 0 0 0 max(2px, calc(var(--k) * 3)) #FB6002, 0 0 40px rgba(251, 96, 2, .45); }
+.p3[data-focus="mcu"] [data-part="mcu"] .p3-tag, .p3[data-focus="pmic"] [data-part="pmic"] .p3-tag, .p3[data-focus="rf"] [data-part="rf"] .p3-tag,
+.p3[data-focus="adc"] [data-part="adc"] .p3-tag, .p3[data-focus="flash"] [data-part="flash"] .p3-tag { opacity: 1; }
+.p3 .pcb [data-part] { transition: opacity .35s ease; }
+.p3[data-focus] .p3-layer--mask .pcb [data-part], .p3[data-focus] .p3-layer--silk .pcb [data-part] { opacity: .25; }
+.p3[data-focus="mcu"] .pcb [data-part="mcu"], .p3[data-focus="pmic"] .pcb [data-part="pmic"], .p3[data-focus="rf"] .pcb [data-part="rf"],
+.p3[data-focus="adc"] .pcb [data-part="adc"], .p3[data-focus="flash"] .pcb [data-part="flash"] { opacity: 1 !important; }
+
+/* ---------- Captions, parts row, progress ---------- */
+.p3__ui {
+  position: relative; z-index: 2; width: 100%;
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: var(--s-4) var(--s-7);
+  padding-bottom: clamp(24px, 5vh, 56px);
+}
+.p3__captions { display: grid; min-height: 118px; }
+.p3__cap {
+  grid-area: 1 / 1; align-self: end; max-width: 520px; display: flex; flex-direction: column; gap: 8px;
+  opacity: 0; transform: translateY(12px); transition: opacity .5s ease, transform .6s cubic-bezier(.16, 1, .3, 1); pointer-events: none;
+}
+.p3__kicker { font-family: var(--font-mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: #FB6002; }
+.p3__cap h3 { font-family: var(--font-display); font-size: clamp(24px, 2.4vw, 34px); font-weight: 600; letter-spacing: -0.02em; line-height: 1.1; color: #F5F5F7; }
+.p3__cap p:last-child { font-size: 16px; line-height: 1.5; color: var(--pp-grey-2); }
+.p3:not([data-focus])[data-step="0"] [data-cap="0"], .p3:not([data-focus])[data-step="1"] [data-cap="1"],
+.p3:not([data-focus])[data-step="2"] [data-cap="2"], .p3:not([data-focus])[data-step="3"] [data-cap="3"],
+.p3:not([data-step]) [data-cap="0"],
+.p3[data-focus="mcu"] [data-cap-part="mcu"], .p3[data-focus="pmic"] [data-cap-part="pmic"], .p3[data-focus="rf"] [data-cap-part="rf"],
+.p3[data-focus="adc"] [data-cap-part="adc"], .p3[data-focus="flash"] [data-cap-part="flash"] { opacity: 1; transform: none; }
+
+.p3__parts { display: inline-flex; flex-wrap: wrap; gap: 4px; padding: 4px; border-radius: 999px; background: rgba(255, 255, 255, .06); border: 1px solid rgba(255, 255, 255, .08); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+.p3__parts button {
+  min-height: 38px; padding: 0 16px; border: 0; border-radius: 999px; background: transparent; cursor: pointer;
+  font: 700 13px/1 var(--font-display); letter-spacing: .08em; color: var(--pp-grey-2);
+  transition: background-color .25s ease, color .25s ease;
+}
+.p3__parts button:hover, .p3__parts button.is-active { color: #F5F5F7; background: rgba(255, 255, 255, .08); }
+.p3__parts button[aria-pressed="true"] { background: #F5F5F7; color: #0A0A0B; }
+.p3__parts button:focus-visible { outline: 2px solid #FB6002; outline-offset: 2px; }
+
+.p3__progress { grid-column: 1 / -1; display: flex; gap: 6px; }
+.p3__progress i { flex: 1; height: 2px; border-radius: 2px; background: rgba(255, 255, 255, .12); position: relative; overflow: hidden; }
+.p3__progress i::after { content: ""; position: absolute; inset: 0; background: #F5F5F7; transform-origin: left; transform: scaleX(0); transition: transform .4s ease; }
+.p3[data-step="0"] .p3__progress i:nth-child(-n+1)::after, .p3[data-step="1"] .p3__progress i:nth-child(-n+2)::after,
+.p3[data-step="2"] .p3__progress i:nth-child(-n+3)::after, .p3[data-step="3"] .p3__progress i::after { transform: scaleX(1); }
+
+/* ---------- Smaller screens ---------- */
+@media (max-width: 959px) {
+  .p3 { height: 400vh; }
+  .p3__stage { --bw: min(88vw, calc((100vh - var(--gnav-h) - 280px) * 1.6)); }
+  .p3__ui { grid-template-columns: minmax(0, 1fr); gap: var(--s-4); }
+  .p3-label > span { font-size: 12px; gap: 6px; }
+  .p3-label > span::after { width: 24px; }
+}
+@media (max-width: 959px) and (orientation: portrait) {
+  /* Tall screen: the board turns to portrait as it tilts, so it fills the height.
+     No room beside it for layer names; the captions carry them. */
+  .p3 { --tilt: 50deg; --turn: -84deg; --s0: .6; --sA: .98; --sE: .14; }
+  .p3__stage { --bw: min(150vw, calc((100vh - var(--gnav-h) - 290px) * 1.25)); }
+  .p3-label { display: none; }
+}
+@media (max-width: 720px) {
+  .p3__captions { min-height: 132px; }
+  .p3__cap h3 { font-size: 24px; }
+  .p3__cap p:last-child { font-size: 15px; }
+  .p3__parts { justify-self: start; }
+  .p3__parts button { min-height: 36px; padding: 0 12px; font-size: 12px; }
+  .p3-tag > span { padding: 5px 9px; font-size: 10px; margin-bottom: 18px; }
+  .p3-tag > span::after { height: 18px; }
+}
+/* Reduced motion / ?static: --p is 1 → the exploded view with named parts, no pin needed. */
+html:not(.fx-on) .p3 { height: auto; }
+html:not(.fx-on) .p3__sticky { position: relative; top: 0; height: min(900px, calc(100vh - var(--gnav-h))); min-height: 620px; }
