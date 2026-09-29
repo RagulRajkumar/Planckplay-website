@@ -37,8 +37,8 @@
   /* Spacing scale — every gap on the site comes from here */
   --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px; --s-5: 24px; --s-6: 32px;
   --s-7: 48px; --s-8: 64px; --s-9: 96px; --s-10: 128px;
-  --section-y: clamp(96px, 12vw, 176px);     /* vertical padding of every section */
-  --head-gap: clamp(40px, 5vw, 72px);        /* section heading → content */
+  --section-y: clamp(56px, 8vw, 112px);      /* vertical padding of every section */
+  --head-gap: clamp(32px, 4vw, 56px);        /* section heading → content */
   --grid-gap: clamp(16px, 1.6vw, 24px);      /* between cards */
   --container: 1240px;
   --container-narrow: 980px;

@@ -1,10 +1,10 @@
 /* Footer — Apple-style fine print on dark. */
-.footer { background: var(--pp-ink-1); color: var(--pp-grey-2); font-size: 15px; }
+.footer { background: var(--pp-ink-1); color: var(--pp-grey-2); border-top: 1px solid rgba(255, 255, 255, .08); font-size: 13px; }
 .footer__inner { max-width: var(--container); margin: 0 auto; padding: var(--s-8) var(--gutter) var(--s-6); display: flex; flex-direction: column; gap: var(--s-7); }
 /* Brand column (logo + tagline) sits in the same row as the link columns */
 .footer__cols { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(max-content, 1.25fr) minmax(0, .9fr) minmax(0, .9fr) minmax(max-content, 1.1fr); gap: var(--s-7) var(--s-6); }
-.footer__col h2 { margin: 0 0 var(--s-4); font-family: var(--font-body); font-size: 16px; font-weight: 600; color: #F5F5F7; }
-.footer__col ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; line-height: 1.4; }
+.footer__col h2 { margin: 0 0 var(--s-4); font-family: var(--font-body); font-size: 13px; font-weight: 600; color: #F5F5F7; }
+.footer__col ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
 .footer__col a { color: var(--pp-grey-2); text-decoration: none; transition: color .2s ease; }
 .footer__contact a { color: var(--pp-grey-2); }
 .footer__col a:hover { color: #F5F5F7; text-decoration: underline; }
@@ -12,7 +12,7 @@
 .footer__contact .icon { margin-top: 1px; }
 .footer__contact .icon { color: var(--pp-orange); }
 .footer__social { display: flex; flex-wrap: wrap; gap: var(--s-2) var(--s-5); margin-top: var(--s-5); }
-.footer__legal { display: flex; flex-wrap: wrap; gap: var(--s-4) var(--s-7); justify-content: space-between; align-items: center; padding-top: var(--s-5); border-top: 1px solid rgba(255, 255, 255, .08); color: var(--pp-grey); font-size: 13px; line-height: 1.7; }
+.footer__legal { display: flex; flex-wrap: wrap; gap: var(--s-4) var(--s-7); justify-content: space-between; align-items: center; padding-top: var(--s-5); border-top: 1px solid rgba(255, 255, 255, .08); color: var(--pp-grey); line-height: 1.7; }
 .footer__legal div { display: flex; gap: var(--s-5); }
 .footer__legal a { color: var(--pp-grey-2); text-decoration: none; }
 .footer__legal a:hover { color: #F5F5F7; }
@@ -20,7 +20,7 @@
 .footer__logo { display: inline-flex; text-decoration: none; }
 .brand--footer .brand__mark { width: 48px; }
 .brand--footer .brand__word { height: 17px; }
-.footer__tagline { max-width: 34ch; font-size: 15px; line-height: 1.55; color: var(--pp-grey-2); }
+.footer__tagline { max-width: 34ch; font-size: 14px; line-height: 1.55; color: var(--pp-grey-2); }
 @media (max-width: 1068px) {
   .footer__cols { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .footer__brand { grid-column: 1 / -1; padding-right: 0; }

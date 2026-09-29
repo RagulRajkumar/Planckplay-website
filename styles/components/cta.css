@@ -1,5 +1,5 @@
 /* Closing CTA: centered headline with the animated mark rising behind it. */
-.cta { --p: 0; position: relative; overflow: hidden; background: #000; color: #F5F5F7; text-align: center; padding: calc(var(--section-y) * 1.15) 0; }
+.cta { --p: 0; position: relative; overflow: hidden; background: #000; color: #F5F5F7; text-align: center; padding: var(--section-y) 0; }
 .cta__glow { position: absolute; left: 50%; top: 55%; width: min(1100px, 150vw); aspect-ratio: 1; transform: translate(-50%, -50%) scale(calc(.7 + var(--p) * .5)); border-radius: 50%; pointer-events: none; background: radial-gradient(circle, rgba(233, 11, 0, .3) 0%, rgba(233, 11, 0, .08) 40%, transparent 68%); }
 .cta__mark { position: absolute; left: 50%; top: 50%; width: min(620px, 110vw); margin-left: calc(min(620px, 110vw) / -2); margin-top: calc(min(620px, 110vw) / -2); opacity: .22; pointer-events: none; }
 .cta__mark .logo-mark { width: 100%; }

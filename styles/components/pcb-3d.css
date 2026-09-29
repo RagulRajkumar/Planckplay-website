@@ -23,7 +23,7 @@
   --tilt: 54deg; --turn: -30deg; --s0: 1; --sA: .88; --sE: .2;
   --rx: calc(var(--A) * var(--tilt) + var(--C) * 4deg - var(--oy, 0) * 8deg);
   --rz: calc(var(--A) * var(--turn) + var(--C) * -10deg + var(--ox, 0) * 12deg);
-  position: relative; height: 460vh;
+  position: relative; height: 400vh;
 }
 .p3__sticky {
   position: sticky; top: var(--gnav-h); height: calc(100vh - var(--gnav-h)); overflow: hidden;
@@ -227,7 +227,7 @@
 
 /* ---------- Smaller screens ---------- */
 @media (max-width: 959px) {
-  .p3 { height: 400vh; }
+  .p3 { height: 340vh; }
   .p3__stage { --bw: min(88vw, calc((100vh - var(--gnav-h) - 280px) * 1.6)); }
   .p3__ui { grid-template-columns: minmax(0, 1fr); gap: var(--s-4); }
   .p3-label > span { font-size: 12px; gap: 6px; }
