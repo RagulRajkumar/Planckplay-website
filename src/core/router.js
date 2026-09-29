@@ -59,6 +59,7 @@
       const c = page.mount && page.mount(outlet, route);
       if (typeof c === 'function') cleanups.push(c);
       cleanups.push(PP.fx.mount(outlet));
+      PP.blendSections(outlet);
       current = { page, route };
       requestAnimationFrame(() => {
         scrollToAnchor(route.anchor, false);

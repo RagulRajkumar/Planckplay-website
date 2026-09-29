@@ -11,11 +11,11 @@
     return html`
       <footer class="footer">
         <div class="footer__inner">
-          <div class="footer__brand">
-            <a class="footer__logo" href="${href('home')}" aria-label="Planck Play, home">${Brand({ className: 'brand--footer' })}</a>
-            <p class="footer__tagline">${company.oneLine}</p>
-          </div>
           <div class="footer__cols">
+            <div class="footer__brand">
+              <a class="footer__logo" href="${href('home')}" aria-label="Planck Play, home">${Brand({ className: 'brand--footer' })}</a>
+              <p class="footer__tagline">${company.oneLine}</p>
+            </div>
             ${footerColumns.map((col) => html`
               <div class="footer__col">
                 <h2>${col.title}</h2>

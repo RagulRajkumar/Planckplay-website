@@ -1,6 +1,6 @@
 /**
  * HomeHero — "Engineering What's Next." (reference image 2).
- *   • canvas of circuit traces with travelling pulses; the cursor lights up
+ *   • canvas of circuit traces; the cursor lights up
  *     traces near it
  *   • the 3D Planck mark: tilts to the pointer, drag to spin, click / Enter
  *     sends a pulse wave through the circuit
@@ -58,7 +58,7 @@
     const offs = [];
     const on = (el, ev, fn, opt) => { if (!el) return; el.addEventListener(ev, fn, opt); offs.push(() => el.removeEventListener(ev, fn, opt)); };
     const s = { wide: window.innerWidth >= 960, spin: 0, spinVel: 0, orbitA: 0, hov: 0, tiltX: 0, tiltY: 0, pulseAmt: 0,
-      mx: null, my: null, hoverChip: null, drag: null, cursorIn: false, cx: -1e4, cy: -1e4, bursts: [], pulses: [] };
+      mx: null, my: null, hoverChip: null, drag: null, cursorIn: false, cx: -1e4, cy: -1e4, bursts: [] };
     const cv = {};
     let loopId = 0;
 
@@ -96,15 +96,8 @@
       const br = layer(), bx = br.getContext('2d'); bx.scale(dpr, dpr); bx.lineWidth = 1.25; bx.lineJoin = 'round'; bx.strokeStyle = 'rgba(251,96,2,.8)'; bx.fillStyle = 'rgba(252,204,39,.9)';
       traces.forEach((t) => { bx.beginPath(); t.pts.forEach((p, j) => (j ? bx.lineTo(p[0], p[1]) : bx.moveTo(p[0], p[1]))); bx.stroke(); const e = t.pts[t.pts.length - 1]; bx.beginPath(); bx.arc(e[0], e[1], 2.6, 0, Math.PI * 2); bx.fill(); });
       Object.assign(cv, { traces, staticLayer: off, brightLayer: br, tmpLayer: layer() });
-      s.pulses = Array.from({ length: Math.min(24, Math.max(8, Math.round(n / 3))) }, () => ({ t: traces[Math.floor(rnd() * traces.length)], d: rnd() * 200, v: 50 + rnd() * 90 }));
       draw(0);
     }
-    const pointAt = (t, d) => {
-      if (d < 0 || d > t.L) return null;
-      let j = 1; while (j < t.cum.length - 1 && t.cum[j] < d) j++;
-      const a = t.pts[j - 1], b = t.pts[j], k = (d - t.cum[j - 1]) / (t.cum[j] - t.cum[j - 1] || 1);
-      return [a[0] + (b[0] - a[0]) * k, a[1] + (b[1] - a[1]) * k];
-    };
     function draw(dt) {
       if (!cv.staticLayer) return;
       const x = canvas.getContext('2d'), dpr = cv.dpr;
@@ -124,20 +117,6 @@
         });
         s.bursts = s.bursts.filter((b) => b.r < b.max);
       }
-      x.setTransform(dpr, 0, 0, dpr, 0, 0);
-      s.pulses.forEach((p) => {
-        p.d += p.v * dt;
-        if (p.d > p.t.L + 40 && p.temp) { p.dead = true; return; }
-        if (p.d > p.t.L + 40) { p.t = cv.traces[Math.floor(Math.random() * cv.traces.length)]; p.d = 0; p.v = 50 + Math.random() * 90; }
-        const h = pointAt(p.t, p.d);
-        if (h) { const gr = x.createRadialGradient(h[0], h[1], 0, h[0], h[1], 16); gr.addColorStop(0, 'rgba(233,11,0,.5)'); gr.addColorStop(1, 'rgba(233,11,0,0)'); x.fillStyle = gr; x.fillRect(h[0] - 16, h[1] - 16, 32, 32); }
-        for (let k = 7; k >= 0; k--) {
-          const pt = pointAt(p.t, p.d - k * 5); if (!pt) continue;
-          x.fillStyle = k === 0 ? 'rgba(252,204,39,.95)' : `rgba(251,96,2,${((1 - k / 8) * 0.6).toFixed(3)})`;
-          x.beginPath(); x.arc(pt[0], pt[1], k === 0 ? 1.8 : 1.4, 0, Math.PI * 2); x.fill();
-        }
-      });
-      if (s.pulses.some((p) => p.dead)) s.pulses = s.pulses.filter((p) => !p.dead);
     }
 
     /* ---- 3D mark ---- */
@@ -152,8 +131,6 @@
       const hr = hero.getBoundingClientRect(), cr = core.getBoundingClientRect();
       const bx = cr.left + cr.width / 2 - hr.left, by = cr.top + cr.height / 2 - hr.top;
       s.bursts.push({ x: bx, y: by, r: 0, max: Math.hypot(hr.width, hr.height) });
-      cv.traces.map((t) => ({ t, d: Math.hypot(t.pts[0][0] - bx, t.pts[0][1] - by) })).sort((a, b) => a.d - b.d).slice(0, 18)
-        .forEach((nb) => s.pulses.push({ t: nb.t, d: -nb.d * 0.35, v: 380 + Math.random() * 260, temp: true }));
     }
     on(core, 'keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pulse(); } });
     on(core, 'pointerdown', (e) => {
@@ -218,7 +195,7 @@
       if (wide !== s.wide) {
         s.wide = wide;
         qa('[data-orbit]').forEach((c) => { c.querySelector('b').textContent = wide ? c.dataset.long : c.dataset.short; });
-        hint.textContent = wide ? '' : '';
+        if (hint) hint.textContent = '';
       }
       initCanvas();
     };
