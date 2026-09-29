@@ -12,17 +12,17 @@
 
       ${Section({ id: 'services', theme: 'paper', children: html`
         <div class="detail-list">
-          ${services.map((s) => DetailRow({ id: s.id, index: `S-${s.index}`, title: s.title, text: s.summary,
+          ${services.map((s) => DetailRow({ id: s.id, title: s.title, text: s.summary,
             linkLabel: 'Discuss this', linkHref: href('contact', 'engineer') }))}
         </div>` })}
 
       ${Section({ id: 'delivery', theme: 'dark-raised', innerClass: 'section-inner--wide-gap', children: html`
-        <div data-reveal>${SectionHeader({ index: '02', label: 'How delivery works', title: 'From your requirement to a supported system',
+        <div data-reveal>${SectionHeader({ label: 'How delivery works', title: 'From your requirement to a supported system',
           lede: `${numberWord(deliverySteps.length, true)} stages, each with a named output. You receive a written proposal with the scope, phases and timeline before any build work starts.`,
           linkLabel: 'Submit an RFP', linkHref: href('contact', 'rfp') })}</div>
         ${ProcessTimeline({ steps: deliverySteps, brackets: deliveryBrackets, breakpoint: 1180 })}` })}
 
-      ${CTASection({ index: '03' })}`,
+      ${CTASection()}`,
   });
 
   /**

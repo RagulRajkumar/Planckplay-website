@@ -23,7 +23,7 @@
       { icon: 'cpu', title: 'PCB & electronics', caption: 'Schematics, layout, bring-up, and redesigns when parts go obsolete.', href: href('solutions', 'embedded-iot'), tone: 'amber' },
       { icon: 'code', title: 'Software, end to end', caption: 'From the first screen design to a live, cloud-hosted product, then updates and support after launch.', href: href('solutions', 'software-qa'), tone: 'steel' },
       { icon: 'checkCircle', title: 'Automation & testing', caption: 'Process automation and test automation for web, API and mobile.', href: href('solutions', 'software-qa'), tone: 'red' },
-      { icon: 'sparkles', title: 'AI & intelligent systems', caption: 'Machine-data analytics, computer vision and LLM tools, applied where they earn their place.', href: href('capabilities'), tone: 'orange' },
+      { icon: 'sparkles', title: 'AI & intelligent systems', caption: 'Machine-data analytics, LLM tools, applied where they earn their place.', href: href('capabilities'), tone: 'orange' },
     ],
 
     statement: 'Real products fail at the seams between disciplines. We put hardware, firmware and software in one team, so the seams are designed, not discovered.',
@@ -55,14 +55,7 @@
       ['Scale', 'Pilot, deployment and support as the product and your operation grow.'],
     ],
 
-    industries: [
-      ['Healthcare', 'Device electronics, data acquisition and software for medical and laboratory equipment.', 'activity'],
-      ['Manufacturing', 'Machine monitoring, OEE dashboards, production apps, CRM and ERP integration.', 'chartLine'],
-      ['Industrial Automation', 'Controllers, sensors and test rigs that keep automated lines measurable.', 'cpu'],
-      ['Energy', 'Remote monitoring for pumps, motors, solar and power equipment.', 'radio'],
-      ['Automotive', 'Component drawings, reverse engineering, test fixtures and embedded modules.', 'compass'],
-      ['Agriculture', 'Field sensors, pump controllers and low-power connected devices.', 'cloud'],
-      ['Smart Infrastructure', 'Connected sensing and dashboards for buildings, water and utilities.', 'building'],
-    ].map(([name, text, icon], i) => ({ n: String(i + 1).padStart(2, '0'), name, text, icon })),
+    /** Same list as the Industries page (site-content.js), so the two never drift apart. */
+    industries: PP.site.industries.map((it) => ({ name: it.name, text: it.summary, icon: it.icon, href: it.href })),
   });
 })();

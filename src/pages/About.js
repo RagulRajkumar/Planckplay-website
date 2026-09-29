@@ -13,19 +13,19 @@
       ${PageHero({ eyebrow: 'About Planck Play', title: 'Different minds. One engineering vision.', lede: company.oneLine })}
 
       ${Section({ id: 'story', theme: 'paper', children: html`
-        <div data-reveal>${SectionHeader({ index: '01', label: 'Who we are', title: 'Specialists in every discipline, one team',
+        <div data-reveal>${SectionHeader({ label: 'Who we are', title: 'Specialists in every discipline, one team',
           lede: 'Planck Play brings together specialists with complementary expertise. We started the company to take on complex technical challenges and deliver end-to-end solutions.' })}</div>
         <div class="tag-list about-disciplines" data-reveal>${disciplines.map((d) => html`<span class="tech-tag">${d}</span>`)}</div>` })}
 
       ${Section({ id: 'commitments', theme: 'dark', children: html`
-        <div data-reveal>${SectionHeader({ index: '02', label: 'How we work', title: `${numberWord(whyUs.length, true)} commitments, in writing`,
+        <div data-reveal>${SectionHeader({ label: 'How we work', title: `${numberWord(whyUs.length, true)} commitments, in writing`,
           lede: 'They apply to every engagement, whatever its size, and they go into the proposal.' })}</div>
         <div class="grid-fit" style="--min:320px; gap:16px" data-reveal>
           ${whyUs.map((w) => html`<div class="why-with-key">${WhyPanel(w)}<span class="why-with-key__key">${w.key}</span></div>`)}
         </div>` })}
 
       ${company.team.length ? Section({ id: 'team', theme: 'white', children: html`
-        <div data-reveal>${SectionHeader({ index: '03', label: 'Team', title: 'The founding team' })}</div>
+        <div data-reveal>${SectionHeader({ label: 'Team', title: 'The founding team' })}</div>
         <div class="grid-auto team-grid" style="--min:240px; gap:40px 20px" data-stagger>
           ${company.team.map((m, i) => html`
             <article class="team-card">

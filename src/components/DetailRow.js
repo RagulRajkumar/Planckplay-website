@@ -4,17 +4,17 @@
 
   /**
    * DetailRow — one anchored entry on a listing page (a service, an industry…):
-   * index | title + text (+ problem/answer pairs) (+ tags) | action link.
+   * [index] | title + text (+ problem/answer pairs) (+ tags) | action link.
    * `points` is a list of [problem, what we do] pairs, shown as two columns.
-   * @param {{ id?: string, index: string, title: string, text?: string, label?: string,
+   * @param {{ id?: string, index?: string, title: string, text?: string, label?: string,
    *           points?: [string, string][], pointsHead?: [string, string],
    *           tags?: (string|{label:string,pending?:boolean})[], tagsLabel?: string,
    *           linkLabel?: string, linkHref?: string }} props
    */
   function DetailRow({ id, index, title, text, label, points = [], pointsHead = ['The problem', 'What we do'], tags = [], tagsLabel, linkLabel, linkHref }) {
     return html`
-      <article class="detail-row" ${id ? html`id="${id}"` : ''} data-reveal>
-        <span class="detail-row__index">${index}</span>
+      <article class="detail-row${index ? '' : ' detail-row--no-index'}" ${id ? html`id="${id}"` : ''} data-reveal>
+        ${index ? html`<span class="detail-row__index">${index}</span>` : ''}
         <div class="detail-row__main">
           <h2 class="detail-row__title">${title}</h2>
           ${label && !points.length ? html`<span class="pp-card__label">${label}</span>` : ''}

@@ -7,6 +7,7 @@
 .detail-row__title { transition: color .3s ease; }
 .detail-row:last-child { border-bottom: 1px solid var(--color-divider); }
 .detail-row__index { font-family: var(--font-mono); font-size: 13px; letter-spacing: .06em; color: var(--pp-accent-text); padding-top: 6px; }
+.detail-row--no-index { grid-template-columns: minmax(0, 1fr) auto; }
 .detail-row__main { display: flex; flex-direction: column; gap: 14px; max-width: 760px; }
 .detail-row__title { margin: 0; font-family: var(--font-display); font-weight: 500; font-size: clamp(26px, 2.6vw, 38px); line-height: 1.05; letter-spacing: -0.022em; font-weight: 600; text-wrap: balance; color: var(--color-text); }
 .detail-row__text { margin: 0; font-size: 17px; line-height: 1.6; color: var(--pp-muted); text-wrap: pretty; }

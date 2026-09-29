@@ -11,12 +11,12 @@
 
       ${Section({ id: 'sectors', theme: 'paper', children: html`
         <div class="detail-list">
-          ${industries.map((i) => DetailRow({ id: i.id, index: i.index, title: i.name, text: i.who,
+          ${industries.map((i) => DetailRow({ id: i.id, title: i.name, text: i.who,
             label: 'Problems we solve', points: i.points,
             tags: i.capabilities, tagsLabel: 'Skills involved', linkLabel: 'Talk to an engineer', linkHref: href('contact', 'engineer') }))}
         </div>` })}
 
-      ${CTASection({ index: '02' })}`,
+      ${CTASection()}`,
   });
 
   PP.pages.Industries = { key: 'industries', ...pageMeta('industries'), render };

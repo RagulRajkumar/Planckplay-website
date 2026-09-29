@@ -10,7 +10,6 @@
     return html`
       <a class="pp-card pp-card--link industry-card" href="${item.href}">
         <div class="pp-card__head">
-          <span class="pp-card__index">${item.index}</span>
           ${icon('arrowUpRight', { size: 20, className: 'pp-card__arrow' })}
         </div>
         <h3 class="pp-card__title industry-card__title">${item.name}</h3>

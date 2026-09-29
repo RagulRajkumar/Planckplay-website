@@ -138,15 +138,15 @@
       </div>
       <div class="ind__track" data-track tabindex="0" role="region" aria-label="Industries">
         ${items.map((it, i) => html`
-          <article class="ind__card" data-spotlight>
+          <a class="ind__card" href="${it.href}" data-spotlight aria-label="${it.name}: problems we solve">
             ${ArtPanel({ iconName: it.icon, tone: ['red', 'orange', 'amber', 'steel'][i % 4] })}
             <div class="ind__shade"></div>
             <div class="ind__body">
-              <span class="ind__n">${it.n} / ${pad(items.length)}</span>
               <h3>${it.name}</h3>
               <p>${it.text}</p>
+              <span class="ind__more">Problems we solve ${icon('arrowRight', { size: 16 })}</span>
             </div>
-          </article>`)}
+          </a>`)}
       </div>
       <div class="container"><a class="link-arrow" href="${href('industries')}">Problems we solve, by industry ${icon('chevronRight', { size: 18 })}</a></div>
     </section>`;

@@ -21,10 +21,10 @@
       meta: 'How we run feasibility studies, technology evaluations and proofs-of-concept, and how we de-risk an engineering project before production.' },
     { key: 'capabilities', label: 'Capabilities', url: '/capabilities',
       title: 'Engineering capabilities and technologies | Planck Play',
-      meta: 'Embedded and electronics, mechanical CAD, software, cloud, quality engineering and enterprise systems (ERP and CRM): the technologies our team works with, by discipline.' },
+      meta: 'Embedded and electronics, mechanical CAD, software, AI solutions, quality engineering, cloud and enterprise systems (ERP and CRM): the technologies our team works with, by discipline.' },
     { key: 'industries', label: 'Industries', url: '/industries',
       title: 'Industries we engineer for | Planck Play',
-      meta: 'Pumps and motors, machinery, hardware startups, technology companies and research institutions: the everyday problems we solve in each, explained in plain language.' },
+      meta: 'Healthcare, manufacturing, industrial automation, energy, automotive, agriculture and smart infrastructure: the everyday problems we solve in each, explained in plain language.' },
     { key: 'about', label: 'About', url: '/about',
       title: 'About Planck Play LLP',
       meta: 'The specialists behind an R&D-led engineering company. Our mission, engineering philosophy and how we work with clients.' },
@@ -85,10 +85,10 @@
   ];
 
   const rdKinds = [
-    { index: 'R-01', title: 'Feasibility study', text: 'Can it be built, and with which risks? A written answer before you commit to the full build.', output: 'Feasibility report with a recommendation' },
-    { index: 'R-02', title: 'Technology evaluation', text: 'Candidate sensors, controllers, platforms or vendors, compared on the bench against your requirements.', output: 'Comparison matrix and test notes' },
-    { index: 'R-03', title: 'Proof-of-concept', text: 'The smallest working build that proves the riskiest assumption in the project.', output: 'Working PoC and test log' },
-    { index: 'R-04', title: 'Engineering validation', text: 'Structured testing of a prototype against its specification, with every result recorded.', output: 'Validation test report' }
+    { title: 'Feasibility study', text: 'Can it be built, and with which risks? A written answer before you commit to the full build.', output: 'Feasibility report with a recommendation' },
+    { title: 'Technology evaluation', text: 'Candidate sensors, controllers, platforms or vendors, compared on the bench against your requirements.', output: 'Comparison matrix and test notes' },
+    { title: 'Proof-of-concept', text: 'The smallest working build that proves the riskiest assumption in the project.', output: 'Working PoC and test log' },
+    { title: 'Engineering validation', text: 'Structured testing of a prototype against its specification, with every result recorded.', output: 'Validation test report' }
   ];
 
   const demos = [
@@ -97,30 +97,31 @@
       flow: ['Pump and sensors', 'Controller', 'Connectivity', 'Phone dashboard'],
       tags: ['PCB design', 'Firmware', 'IoT', 'Mobile app'],
       photo: 'IoT pump monitor on the bench', image: null, icon: 'activity',
-      industry: 'Pumps, motors and controllers', href: href('contact', 'engineer') },
+      industry: 'Energy', href: href('contact', 'engineer') },
     { id: 'oee-rig', kind: 'Internal demo', title: 'Machine-monitoring rig with live OEE dashboard',
       summary: 'Captures machine signals and calculates OEE (availability \u00d7 performance \u00d7 quality) live on a dashboard.',
       flow: ['Machine signals', 'Edge device', 'Data service', 'OEE dashboard'],
       tags: ['Sensors', 'Edge device', 'Dashboards', 'Factory systems'],
       photo: 'Machine-monitoring rig and OEE screen', image: null, icon: 'chartLine',
-      industry: 'Machinery and general engineering', href: href('contact', 'engineer') }
+      industry: 'Manufacturing', href: href('contact', 'engineer') }
   ];
 
   const capabilities = [
-    { index: 'C-01', name: 'Embedded and electronics', icon: 'cpu',
+    { name: 'Embedded and electronics', icon: 'cpu',
       tags: [ { label: 'PCB schematic and layout' }, { label: 'Microcontroller firmware' }, { label: 'ESP32', pending: true }, { label: 'STM32', pending: true },
               { label: 'Sensors and device integration' }, { label: 'IoT connectivity' }, { label: 'MQTT', pending: true }, { label: 'Hardware bring-up and testing' } ] },
-    { index: 'C-02', name: 'Mechanical', icon: 'compass',
+    { name: 'Mechanical', icon: 'compass',
       tags: [ { label: '3D CAD' }, { label: '2D drawings with GD&T' }, { label: 'Reverse engineering' }, { label: 'Renders' } ] },
-    { index: 'C-03', name: 'Software', icon: 'code',
+    { name: 'Software', icon: 'code',
       tags: [ { label: 'Web applications' }, { label: 'Backend services and APIs' }, { label: 'Databases' }, { label: 'Mobile apps', pending: true }, { label: 'UI and UX design' }, { label: 'Automation' }] },
-    { index: 'C-04', name: 'Quality engineering', icon: 'check',
+    { name: 'AI solutions', icon: 'spark',
+      tags: [ { label: 'Machine-data analytics' }, { label: 'Gen AI' }, { label: 'LLM assistants and chatbots' },
+              { label: 'Document and data extraction' }, { label: 'AI-powered dashboards' } ] },
+    { name: 'Quality engineering', icon: 'check',
       tags: [ { label: 'Web test automation' }, { label: 'API test automation' }, { label: 'Mobile test automation' }, { label: 'Test strategy' }, { label: 'Regression testing' } ] },
-    { index: 'C-05', name: 'Data and AI', icon: 'spark', pending: true,
-      tags: [ { label: 'Dashboards' }, { label: 'Machine-data analytics' }, { label: 'Computer vision' }, { label: 'LLM-based tools' } ] },
-    { index: 'C-06', name: 'Cloud and DevOps', icon: 'cloud',
+    { name: 'Cloud and DevOps', icon: 'cloud',
       tags: [ { label: 'Cloud hosting' }, { label: 'Deployment' }, { label: 'CI/CD' }, { label: 'Backups and security' }, { label: 'Monitoring' } ] },
-    { index: 'C-07', name: 'Enterprise systems', icon: 'building',
+    { name: 'Enterprise systems', icon: 'building',
       tags: [ { label: 'CRM' }, { label: 'ERP integration' }, { label: 'SAP integration' } ] }
   ];
 
@@ -142,54 +143,80 @@
     { from: 9, to: 9, label: 'Support' }
   ];
 
-  // Industries page: `who` says who it is for; each point is a problem in the
-  // customer's own words, then what we do about it, in plain language.
+  // Industries (home carousel + Industries page, one list). `summary` is the
+  // one-line card text on Home; `who` says who it is for; each point is a
+  // problem in the customer's own words, then what we do about it.
   const industries = [
-    { id: 'pumps-motors', index: 'I-01', name: 'Pumps, motors and controllers',
-      who: 'For companies that make pumps, motors, starters and control panels.',
+    { id: 'healthcare', name: 'Healthcare', icon: 'activity',
+      summary: 'Device electronics, data acquisition and software for medical and laboratory equipment.',
+      who: 'For makers of medical, diagnostic and laboratory equipment, and the labs that use it.',
       points: [
-        ['A part on your controller board is discontinued, or suddenly hard to get.', 'We redesign the board around parts that are easy to buy, so production keeps running and the product works the same for your customer.'],
-        ['Once a pump leaves your factory, you have no idea whether it is running, faulty or being misused.', 'We add a small connected device that sends running hours, faults and alerts to your phone or a web dashboard.'],
-        ['Service engineers travel to a site just to find out what went wrong.', 'Remote readings show the fault before anyone travels, so the right person goes with the right spare part the first time.'],
+        ['Your device needs new electronics, and every design decision has to be traceable.', 'We design the electronics and firmware against written requirements, with design reviews and test records for every change.'],
+        ['Readings from lab instruments are copied into spreadsheets by hand.', 'We build data-acquisition systems that capture readings automatically and store them where your team can search and compare them.'],
+        ['A key part in your equipment is discontinued.', 'We redesign the board around parts that are easy to buy, and test that the device behaves exactly as before.'],
+        ['You need something working to show clinicians, partners or investors.', 'We build a working prototype, with the electronics, enclosure, firmware and app, that people can try.'],
+      ],
+      capabilities: ['Device electronics', 'Firmware', 'Data acquisition', 'Lab software', 'Prototypes'] },
+    { id: 'manufacturing', name: 'Manufacturing', icon: 'chartLine',
+      summary: 'Machine monitoring, OEE dashboards, production apps, CRM and ERP integration.',
+      who: 'For manufacturing plants, machine builders and fabrication shops.',
+      points: [
+        ['You don’t know how many hours a day your machines actually run.', 'We fit simple sensors that record running, idle and stopped time, and show it with OEE live on a screen or phone.'],
+        ['Production, stock and customer follow-ups live on paper or in spreadsheets.', 'We build shop-floor apps and a CRM that update as work happens, and connect them to your ERP.'],
+        ['You have a part that works, but no drawing of it.', 'We measure the sample and create accurate 3D models and 2D manufacturing drawings, so any vendor can make it.'],
         ['Checking every unit before dispatch is slow and depends on one experienced person.', 'We build test rigs that check each unit automatically and record the result against its serial number.'],
       ],
-      capabilities: ['Controller design', 'Remote monitoring', 'PCB redesign', 'Automatic test rigs'] },
-    { id: 'machinery', index: 'I-02', name: 'Machinery and general engineering',
-      who: 'For machine builders, fabricators and manufacturing plants.',
+      capabilities: ['Machine monitoring', 'OEE dashboards', 'Production apps', 'CRM and ERP integration', 'Reverse engineering'] },
+    { id: 'industrial-automation', name: 'Industrial Automation', icon: 'cpu',
+      summary: 'Controllers, sensors and test rigs that keep automated lines measurable.',
+      who: 'For automation integrators, panel builders and plants running automated lines.',
       points: [
-        ['You have a part that works, but no drawing of it.', 'We measure the sample and create accurate 3D models and 2D manufacturing drawings, so any vendor can make it.'],
-        ['A customer or new vendor wants approved drawings before they will start.', 'We prepare complete drawing packs in the format they ask for.'],
-        ['You don\u2019t know how many hours a day your machines actually run.', 'We fit simple sensors that record running, idle and stopped time and show it live on a screen or phone.'],
-        ['Production, stock and customer follow-ups live on paper or in spreadsheets.', 'We build shop-floor apps and a CRM that update as work happens, and connect them to your ERP.'],
+        ['A line stops and nobody knows why until someone walks over to look.', 'We connect controllers and sensors so stops, faults and counts show up live on a screen or phone.'],
+        ['A controller board in your panel is discontinued, or suddenly hard to get.', 'We redesign it around parts that are easy to buy, so the line keeps running and the panel works the same.'],
+        ['Every new product needs a test rig, and building one takes weeks.', 'We design and build test rigs and fixtures that check each unit automatically and log every result.'],
+        ['Machine data stays locked inside each machine.', 'We add edge devices that collect it and pass it on to your dashboards, historian or ERP.'],
       ],
-      capabilities: ['Drawings from samples', 'Reverse engineering', 'Vendor-approval drawing packs', 'Machine monitoring', 'Production apps', 'CRM'] },
-    { id: 'startups', index: 'I-03', name: 'Product and hardware startups',
-      who: 'For founders turning an idea into a physical or connected product.',
+      capabilities: ['Controller design', 'Sensor integration', 'Test rigs', 'Edge devices', 'Dashboards'] },
+    { id: 'energy', name: 'Energy', icon: 'radio',
+      summary: 'Remote monitoring for pumps, motors, solar and power equipment.',
+      who: 'For makers and operators of pumps, motors, solar and power equipment.',
       points: [
-        ['You have an idea, but nothing working to show investors or first customers.', 'We build a working prototype, with the electronics, firmware and app, that people can hold and use.'],
-        ['You are not sure the idea is technically possible.', 'We run a short feasibility study and tell you plainly: build it, change it or stop.'],
-        ['Hardware, firmware and app are with different freelancers, and the pieces don\u2019t fit together.', 'One team builds all of it, so the parts work together from day one.'],
-        ['You need a small batch for a pilot before going to mass production.', 'We get the design ready for a pilot batch and fix what the pilot shows up.'],
+        ['Once equipment leaves your factory, you have no idea whether it is running, faulty or being misused.', 'We add a small connected device that sends running hours, faults and alerts to your phone or a web dashboard.'],
+        ['Service engineers travel to a site just to find out what went wrong.', 'Remote readings show the fault before anyone travels, so the right person goes with the right spare part the first time.'],
+        ['You only find out how much energy you used when the bill arrives.', 'We meter current, voltage and running hours and show consumption live, per machine or per site.'],
+        ['Sites are remote, with unreliable power or network.', 'We design low-power devices that store readings and send them whenever a connection is available.'],
       ],
-      capabilities: ['Feasibility studies', 'Prototypes', 'Firmware', 'Companion apps', 'Pilot batches'] },
-    { id: 'tech-gcc', index: 'I-04', name: 'Technology companies and GCCs',
-      who: 'For software product companies and global capability centres.',
+      capabilities: ['Remote monitoring', 'Energy metering', 'Low-power IoT', 'Controller design', 'Dashboards'] },
+    { id: 'automotive', name: 'Automotive', icon: 'compass',
+      summary: 'Component drawings, reverse engineering, test fixtures and embedded modules.',
+      who: 'For auto-component makers, their suppliers and test labs.',
       points: [
-        ['Every release waits on days of manual testing.', 'We automate your web, API and mobile tests so they run on every build in minutes.'],
-        ['Bugs reach customers because testing can\u2019t keep up with development.', 'Automated checks catch broken features before a release goes out.'],
-        ['Your systems don\u2019t talk to each other, so people copy data by hand.', 'We connect your apps, databases and third-party services through APIs.'],
-        ['You need more engineers for a project, without a long hiring cycle.', 'Our trained engineers join your team under our technical lead.'],
+        ['A customer needs drawings of a legacy component that only exists as a sample.', 'We measure it and create 3D models and 2D drawings with GD&T, in the format your customer asks for.'],
+        ['Every new part needs a test fixture before it can be approved.', 'We design and build fixtures and test rigs that check each part the same way, every time.'],
+        ['An electronic module needs a redesign or a new feature.', 'We design the PCB and firmware for embedded modules and prove them on the bench before production.'],
+        ['End-of-line test results are written down by hand.', 'We automate the test and record every result against the part’s serial number.'],
       ],
-      capabilities: ['Test automation', 'QA capacity', 'API integration', 'Cloud and DevOps'] },
-    { id: 'research-gov', index: 'I-05', name: 'Research labs, institutions and government',
-      who: 'For research labs, universities and public-sector technical teams.',
+      capabilities: ['Component drawings', 'Reverse engineering', 'Test fixtures', 'Embedded modules'] },
+    { id: 'agriculture', name: 'Agriculture', icon: 'cloud',
+      summary: 'Field sensors, pump controllers and low-power connected devices.',
+      who: 'For agritech companies, farm-equipment makers and irrigation providers.',
       points: [
-        ['The instrument your work needs doesn\u2019t exist off the shelf.', 'We design and build custom instruments and test setups.'],
-        ['Readings are taken and typed in by hand, which is slow and error-prone.', 'We build data-acquisition systems that record sensor readings automatically.'],
-        ['Collected data sits in files that are hard to search or compare.', 'We build software to store, view and analyse it, hosted where your team can reach it.'],
-        ['A research idea needs a working demonstrator.', 'We turn it into a prototype you can test, show and improve.'],
+        ['Someone has to go to the field just to switch a pump on or off.', 'We build pump controllers that can be switched and scheduled from a phone, with alerts when something goes wrong.'],
+        ['Soil, water and weather conditions are guessed rather than measured.', 'We build field sensors that send readings to a phone dashboard, so decisions are based on data.'],
+        ['Devices in the field run on batteries or solar, far from power and network.', 'We design low-power devices that last a season and send data over long-range, low-power links.'],
+        ['You have a product idea, but nothing working to try on a farm.', 'We build a rugged prototype for field trials, then refine it with what the trial shows.'],
       ],
-      capabilities: ['Custom instruments', 'Data-acquisition systems', 'Custom software', 'Prototypes'] }
+      capabilities: ['Field sensors', 'Pump controllers', 'Low-power IoT', 'Phone dashboards', 'Prototypes'] },
+    { id: 'smart-infrastructure', name: 'Smart Infrastructure', icon: 'building',
+      summary: 'Connected sensing and dashboards for buildings, water and utilities.',
+      who: 'For building owners, facility managers, and water and utility operators.',
+      points: [
+        ['Tank levels, pumps and meters are checked by someone walking around.', 'We fit connected sensors that report levels, flow and status on their own, all day.'],
+        ['Leaks and equipment failures are found after the damage is done.', 'Sensors raise an alert the moment readings go out of range, so a person can act early.'],
+        ['Each building or site keeps its data in a different system.', 'We bring every site into one dashboard, hosted where your team can reach it.'],
+        ['You want to prove it on a few sites before rolling it out everywhere.', 'We run a pilot with devices and software built to scale, then roll out what works.'],
+      ],
+      capabilities: ['Connected sensors', 'Alerts', 'Dashboards', 'Cloud hosting', 'Pilot deployments'] },
   ].map(i => ({ ...i, href: href('industries', i.id) }));
 
   const whyUs = [
@@ -201,14 +228,14 @@
       text: 'An NDA before the first technical conversation.' },
     { title: 'Direct access to engineers', key: '1 day \u00b7 72 h',
       text: 'A reply within one working day and a written proposal within 72 hours of discovery.' }
-  ].map((w, i) => ({ ...w, index: String(i + 1).padStart(2, '0') }));
+  ];
 
   const engagement = [
-    { index: 'E-01', title: 'Project-based', icon: 'clipboard', text: 'A defined scope delivered end to end, in clear phases.' },
-    { index: 'E-02', title: 'PoC or prototype sprint', icon: 'flask', text: 'A short, fixed-scope build that answers one technical question.' },
-    { index: 'E-03', title: 'R&D partnership', icon: 'orbit', text: 'A continuing research and development track alongside your product team.' },
-    { index: 'E-04', title: 'Technical consulting', icon: 'search', text: 'An assessment of an existing system, with findings and a plan.' },
-    { index: 'E-05', title: 'Dedicated engineering team', icon: 'users', text: 'Trained engineers inside your team, under our technical leadership.' }
+    { title: 'Project-based', icon: 'clipboard', text: 'A defined scope delivered end to end, in clear phases.' },
+    { title: 'PoC or prototype sprint', icon: 'flask', text: 'A short, fixed-scope build that answers one technical question.' },
+    { title: 'R&D partnership', icon: 'orbit', text: 'A continuing research and development track alongside your product team.' },
+    { title: 'Technical consulting', icon: 'search', text: 'An assessment of an existing system, with findings and a plan.' },
+    { title: 'Dedicated engineering team', icon: 'users', text: 'Trained engineers inside your team, under our technical leadership.' }
   ];
 
   // Each slot stays hidden on the live site until the registration is real.

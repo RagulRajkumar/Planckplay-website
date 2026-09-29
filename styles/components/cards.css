@@ -2,7 +2,30 @@
 .service-card { height: 100%; min-height: 220px; }
 
 /* CapabilityCard */
-.capability-card { height: 100%; min-height: 200px; }
+.capability-card {
+  height: 100%; min-height: 200px;
+  transition: transform .6s var(--ease-expo), box-shadow .6s ease, border-color .4s ease;
+}
+/* Red rule that sweeps across the top edge on hover */
+.capability-card::after {
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 3px; pointer-events: none;
+  background: linear-gradient(90deg, var(--pp-red), var(--pp-orange));
+  transform: scaleX(0); transform-origin: left; transition: transform .6s var(--ease-expo);
+}
+.capability-card__icon {
+  display: inline-grid; place-items: center; width: 44px; height: 44px; border-radius: 14px;
+  color: var(--pp-red); background: rgba(233, 11, 0, .08);
+  transition: background-color .35s ease, color .35s ease, transform .5s var(--ease-expo);
+}
+.capability-card__tag { display: inline-flex; }
+.capability-card__tag .tech-tag { transition: background-color .3s ease, color .3s ease; transition-delay: calc(var(--t) * 35ms); }
+.capability-card:hover { transform: translateY(-6px); border-color: rgba(233, 11, 0, .28); box-shadow: 0 30px 60px -20px rgba(0, 0, 0, .18), 0 0 0 1px rgba(233, 11, 0, .12); }
+.capability-card:hover::after { transform: scaleX(1); }
+.capability-card:hover .capability-card__icon { color: #FFFFFF; background: var(--pp-red); transform: scale(1.06) rotate(-4deg); }
+.capability-card:hover .pp-card__title { color: var(--pp-red-700); }
+.capability-card .pp-card__title { transition: color .3s ease; }
+.capability-card:hover .tech-tag:not(.tech-tag--pending) { background: rgba(233, 11, 0, .08); color: var(--pp-red-700); }
+@media (prefers-reduced-motion: reduce) { .capability-card:hover { transform: none; } }
 .capability-card.is-pending { border-style: dashed; }
 .capability-card .pp-card__label { letter-spacing: .06em; font-size: 12px; }
 

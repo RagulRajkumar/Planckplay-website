@@ -12,7 +12,6 @@
       <article class="pp-card demo-flow">
         <div class="demo-flow__head">
           <span class="demo-flow__kind">${item.kind}</span>
-          <span class="demo-flow__n">D-${String(n).padStart(2, '0')}</span>
         </div>
         <h4 class="demo-flow__title">${item.title}</h4>
         <p class="demo-flow__summary">${item.summary}</p>

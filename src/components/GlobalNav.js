@@ -41,7 +41,6 @@
               <div class="gnav__flyout-grid">
                 ${services.map((s, i) => html`
                   <a class="gnav__flyout-item" href="${s.href}" style="--i:${i}" data-close-all>
-                    <span class="gnav__flyout-index">S-${s.index}</span>
                     <span class="gnav__flyout-title">${s.short}</span>
                   </a>`)}
               </div>

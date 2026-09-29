@@ -1,7 +1,7 @@
 /**
  * CTASection — closing "start a project" band. Centered huge headline with the
  * animated logo mark rising behind it (replaces the old line-art drawing).
- * @param {{ index?: string, label?: string, title?: string, lede?: string, note?: string }} props
+ * @param {{ label?: string, title?: string, lede?: string, note?: string }} props
  */
 (() => {
   'use strict';

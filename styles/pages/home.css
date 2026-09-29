@@ -273,11 +273,42 @@
 .ind__track {
   display: flex; gap: var(--grid-gap); overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior-x: contain;
   --edge: max(var(--gutter), calc((100vw - var(--container)) / 2 + var(--gutter)));
-  padding: 0 var(--edge) var(--s-6); scroll-padding-inline: var(--edge); margin-bottom: var(--s-5);
+  padding: 10px var(--edge) var(--s-6); scroll-padding-inline: var(--edge); margin: -10px 0 var(--s-5); /* 10px headroom so a lifted card is not clipped */
 }
 .ind__track::-webkit-scrollbar { display: none; }
 .ind__card { position: relative; flex: 0 0 min(78vw, 400px); height: clamp(460px, 62vh, 560px); border-radius: var(--radius-card); overflow: hidden; scroll-snap-align: start; background: var(--pp-ink-2); transition: transform .8s var(--ease-expo); }
 .ind__card:hover { transform: translateY(-6px); }
+/* Hover / keyboard focus: the card lights up. A warm ring and a red rule
+   along the top, the glow behind the icon swells, the shade lifts and a
+   "Problems we solve" link slides in. */
+.ind__card::after {
+  content: ""; position: absolute; inset: 0; z-index: 2; border-radius: inherit; pointer-events: none;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .06);
+  background: linear-gradient(90deg, var(--pp-red), var(--pp-orange)) top / 0% 3px no-repeat;
+  transition: box-shadow .5s ease, background-size .7s var(--ease-expo);
+}
+.ind__card:hover::after, .ind__card:focus-visible::after { background-size: 100% 3px; box-shadow: inset 0 0 0 1px rgba(251, 96, 2, .55), inset 0 0 60px rgba(233, 11, 0, .18); }
+.ind__card .art__orb { transition: transform 1s var(--ease-expo), opacity .6s ease; opacity: .8; }
+.ind__card:hover .art__orb, .ind__card:focus-visible .art__orb { transform: scale(1.25) translate(-6%, -8%); opacity: 1; }
+.ind__card .art__grid { transition: filter .6s ease; }
+.ind__card:hover .art__grid, .ind__card:focus-visible .art__grid { filter: brightness(1.8); }
+.ind__card:focus-visible .art__icon { transform: scale(1.08) rotate(-4deg); }
+.ind__shade { transition: opacity .6s ease; }
+.ind__card:hover .ind__shade, .ind__card:focus-visible .ind__shade { opacity: .85; }
+.ind__body h3 { transition: color .35s ease; }
+.ind__card:hover .ind__body h3, .ind__card:focus-visible .ind__body h3 { color: #FFD9A8; }
+.ind__more {
+  display: inline-flex; align-items: center; gap: 6px; margin-top: 4px; font-size: 15px; font-weight: 600; color: var(--pp-orange);
+  opacity: 0; transform: translateY(8px); transition: opacity .45s ease, transform .6s var(--ease-expo);
+}
+.ind__more .icon { transition: transform .35s var(--ease-expo); }
+.ind__card:hover .ind__more, .ind__card:focus-visible .ind__more { opacity: 1; transform: none; }
+.ind__card:hover .ind__more .icon { transform: translateX(4px); }
+/* Touch screens have no hover: keep the link visible */
+@media (hover: none) { .ind__more { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .ind__card:hover { transform: none; } }
+a.ind__card { display: block; color: inherit; text-decoration: none; }
+a.ind__card:focus-visible { outline: 2px solid var(--pp-orange); outline-offset: 3px; }
 .ind__card .art__icon { right: auto; left: 28px; top: 28px; bottom: auto; }
 .ind__card .art__icon .icon { width: 72px; }
 .ind__shade { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(180deg, transparent 35%, rgba(10,10,11,.6) 62%, rgba(10,10,11,.96) 100%); }
