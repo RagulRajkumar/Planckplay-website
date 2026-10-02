@@ -6,8 +6,10 @@
 .about-disciplines .tech-tag { font-size: 14px; padding: 8px 14px; }
 .why-with-key { position: relative; display: flex; }
 .why-with-key .info-panel { flex: 1; }
+/* Title and key share a row; when the card is too narrow the key wraps above the title (never overlaps it). */
+.info-panel__head { display: flex; flex-wrap: wrap-reverse; align-items: baseline; justify-content: space-between; gap: 8px 16px; }
 .why-with-key__key {
-  position: absolute; top: 34px; right: 28px; font-family: var(--font-mono); font-size: 11px;
+  font-family: var(--font-mono); font-size: 11px; white-space: nowrap;
   letter-spacing: .06em; text-transform: uppercase; color: var(--pp-muted);
 }
 .team-card { display: flex; flex-direction: column; gap: 6px; }

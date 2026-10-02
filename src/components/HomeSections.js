@@ -15,7 +15,7 @@
   const pad = (n) => String(n).padStart(2, '0');
 
   const Statement = ({ text }) => html`
-    <section class="statement theme-black" data-progress="pin">
+    <section class="statement theme-black" data-progress="pin" data-behavior="statement">
       <div class="statement__sticky">
         <p class="statement__text container container--narrow" data-words>${text}</p>
       </div>
@@ -29,7 +29,7 @@
           <div class="iot__head center" data-stagger>
             <p class="kicker">IoT systems</p>
             <h2 class="headline headline--xl">Connect Everything.</h2>
-            <p class="lede">One engineering team from the sensor on the machine to the app in someone’s hand.</p>
+            <p class="lede">Sensors designed from scratch and made robust for the field, with every hardware and software layer built around them. Complex systems, one team.</p>
           </div>
           <div class="iot__flow">
             <div class="iot__track" aria-hidden="true"><i></i></div>
@@ -55,7 +55,7 @@
 
   /** The scroll story of the 3D board: [kicker, title, text]. */
   const BOARD_STEPS = [
-    ['Assembled', 'One board, top side.', 'An example of the connected devices we design: power, sensing, wireless and memory around one microcontroller.'],
+    ['Assembled', 'One board, top side.', 'An example of the boards we design and bring up in-house: power, sensing, wireless and memory around one microcontroller.'],
     ['Taken apart', 'Every layer, designed.', 'Glass-fibre core, copper, solder mask with gold pads, silkscreen and parts, each one drawn with a purpose.'],
     ['Copper', 'Routed with intent.', 'Matched signal buses, wide power rails and a ring of stitching vias along the edge to keep noise down.'],
     ['Parts', 'Chosen for the job.', 'Pick a part below to see what it does. Every part we choose has a second source, so the board can still be built.'],
@@ -65,8 +65,8 @@
     <section id="engineering" class="zoom theme-black">
       <div class="container zoom__head" data-stagger>
         <p class="kicker">PCB &amp; electronics</p>
-        <h2 class="headline headline--xl">Designed down<br>to the trace.</h2>
-        <p class="lede">From the first schematic to a board that passes its tests, designed and brought up in-house.</p>
+        <h2 class="headline headline--xl">Any PCB.<br>Any environment.</h2>
+        <p class="lede">Heat, vibration, dust or a tight power budget: we design, lay out and bring up every board in-house, so tested hardware reaches you faster.</p>
       </div>
       ${Pcb3D({ parts: BOARD_PARTS, steps: BOARD_STEPS })}
       <div class="container zoom__features" data-stagger>
@@ -167,6 +167,16 @@
     track.addEventListener('scroll', sync, { passive: true });
     sync();
     return () => { btns.forEach((b, i) => b.removeEventListener('click', fns[i])); track.removeEventListener('scroll', sync); };
+  });
+
+  // Statement: measure the pinned text so CSS can centre it in the space below the nav
+  // (even gaps above and below on short and landscape screens).
+  defineBehavior('statement', (root) => {
+    const sticky = root.querySelector('.statement__sticky');
+    const set = () => root.style.setProperty('--stmt-h', `${sticky.offsetHeight}px`);
+    const ro = new ResizeObserver(set);
+    ro.observe(sticky); set();
+    return () => ro.disconnect();
   });
 
   Object.assign(PP, { Statement, IoTFlow, ZoomReveal, SoftwareShowcase, ApproachPinned, IndustryCarousel });

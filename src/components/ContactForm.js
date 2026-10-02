@@ -312,5 +312,5 @@
     return () => { clearTimeout(copyTimer); offs.forEach((f) => f()); };
   });
 
-  Object.assign(PP, { ContactForm });
+  Object.assign(PP, { ContactForm, mailLinks: links, copyText, fmtSize });
 })();

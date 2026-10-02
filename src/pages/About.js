@@ -21,7 +21,7 @@
         <div data-reveal>${SectionHeader({ label: 'How we work', title: `${numberWord(whyUs.length, true)} commitments, in writing`,
           lede: 'They apply to every engagement, whatever its size, and they go into the proposal.' })}</div>
         <div class="grid-fit" style="--min:320px; gap:16px" data-reveal>
-          ${whyUs.map((w) => html`<div class="why-with-key">${WhyPanel(w)}<span class="why-with-key__key">${w.key}</span></div>`)}
+          ${whyUs.map((w) => html`<div class="why-with-key">${WhyPanel(w)}</div>`)}
         </div>` })}
 
       ${company.team.length ? Section({ id: 'team', theme: 'white', children: html`

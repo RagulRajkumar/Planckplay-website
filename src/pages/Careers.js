@@ -1,7 +1,6 @@
 (() => {
   'use strict';
-  const { html, icon, href, pageMeta, Layout, Section, PageHero, SectionHeader } = PP;
-  const { company } = PP.site;
+  const { html, icon, href, pageMeta, Layout, Section, PageHero, SectionHeader, ApplyForm } = PP;
 
   const tracks = [
     { id: 'roles', icon: 'users', title: 'Open roles', text: 'Engineering roles across electronics, firmware, mechanical design, software and QA.', note: 'Tell us which discipline you work in' },
@@ -15,7 +14,7 @@
       ${PageHero({ eyebrow: 'Careers', title: 'Build real systems with us.',
         lede: 'Join our engineering team. Open roles, a paid Graduate Engineer Trainee programme and internships for engineering students.' })}
 
-      ${Section({ id: 'tracks', theme: 'paper', children: html`
+      ${Section({ id: 'tracks', theme: 'white', children: html`
         <div data-reveal>${SectionHeader({ label: 'Ways to join', title: 'Three ways in' })}</div>
         <div class="grid-fit" style="--min:300px" data-reveal>
           ${tracks.map((t) => html`
@@ -27,13 +26,11 @@
             </div>`)}
         </div>` })}
 
-      ${Section({ id: 'apply', theme: 'dark', children: html`
+      ${Section({ id: 'apply', theme: 'paper', children: html`
         <div data-reveal>${SectionHeader({ label: 'Apply', title: 'Send us what you have built',
-          lede: 'A CV and one project you are proud of, with what you did on it. Hardware, code, drawings or a test report all count.' })}</div>
-        <div class="btn-row" data-reveal>
-          <a class="btn btn-primary btn-pill btn-lg" href="mailto:${company.careersEmail}?subject=${encodeURIComponent('Job application · Planck Play')}" data-magnetic>${icon('mail', { size: 18 })}Email your CV</a>
-          <a class="btn btn-secondary btn-pill btn-lg" href="${href('contact')}">Ask a question first</a>
-        </div>` })}`,
+          lede: 'Upload your CV and answer four short questions, so the engineer who reads it knows what you want to work on.' })}</div>
+        <div class="contact-layout__form apply-form" data-reveal>${ApplyForm()}</div>
+        <a class="link-arrow" href="${href('contact')}" data-reveal="fade">Ask a question first ${icon('chevronRight', { size: 16 })}</a>` })}`,
   });
 
   PP.pages.Careers = { key: 'careers', ...pageMeta('careers'), render };

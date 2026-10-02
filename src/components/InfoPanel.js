@@ -15,10 +15,11 @@
       ${item.output ? html`<p class="info-panel__output">→ ${item.output}</p>` : ''}
     </div>`;
 
-  /** @param {{ title: string, text: string }} item */
+  /** @param {{ title: string, text: string, key?: string }} item  key: short mono label, wraps above the title when space is tight */
   const WhyPanel = (item) => html`
     <div class="info-panel info-panel--why">
-      <h3 class="info-panel__title">${item.title}</h3>
+      ${item.key ? html`<div class="info-panel__head"><h3 class="info-panel__title">${item.title}</h3><span class="why-with-key__key">${item.key}</span></div>`
+        : html`<h3 class="info-panel__title">${item.title}</h3>`}
       <p class="info-panel__text">${item.text}</p>
     </div>`;
 

@@ -125,11 +125,12 @@
 .statement { height: 200vh; }
 .statement__sticky { position: sticky; top: var(--gnav-h); height: calc(100vh - var(--gnav-h)); display: flex; align-items: center; }
 .statement__text { font-family: var(--font-display); font-weight: 600; font-size: clamp(32px, 4.6vw, 64px); line-height: 1.12; letter-spacing: -0.022em; color: #F5F5F7; text-wrap: balance; }
-/* The block is only as tall as its text and pins a little above centre, so
-   when the pin releases the next section follows straight after the text
-   (no empty half-screen below it). */
-.statement__sticky { top: calc(var(--gnav-h) + 20vh); height: auto; padding-block: var(--s-7); }
-@media (max-width: 959px) { .statement { height: 150vh; } .statement__sticky { top: calc(var(--gnav-h) + 18vh); } }
+/* The block is only as tall as its text and pins centred in the space below
+   the nav (--stmt-h is measured by the "statement" behavior), so the gaps
+   above and below match on any screen, and when the pin releases the next
+   section follows straight after the text. */
+.statement__sticky { top: max(var(--gnav-h), calc(var(--gnav-h) + (100svh - var(--gnav-h) - var(--stmt-h, 0px)) / 2)); height: auto; padding-block: var(--s-7); }
+@media (max-width: 959px) { .statement { height: 150vh; } }
 
 /* ---------- IoT flow (reference image 1) ---------- */
 .iot { --p: 0; height: 280vh; }
@@ -342,6 +343,8 @@ a.ind__card:focus-visible { outline: 2px solid var(--pp-orange); outline-offset:
   .hhero__lede { font-size: 16px; }
   .hhero__stage { max-width: min(78vh, 360px); }
   .hhero__chip { font-size: 11px; padding: 6px 10px; }
+  .statement__sticky { padding-block: var(--s-4); }
+  .statement__text { font-size: clamp(22px, 7vh, 34px); }
   .phero__inner { padding-block: var(--s-6) var(--s-7); }
   .phero__title { font-size: clamp(32px, 9vh, 48px); }
 }

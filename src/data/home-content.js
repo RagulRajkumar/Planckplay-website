@@ -29,11 +29,11 @@
     statement: 'Real products fail at the seams between disciplines. We put hardware, firmware and software in one team, so the seams are designed, not discovered.',
 
     iotNodes: [
-      { icon: 'activity', name: 'Sensors', text: 'Current, temperature, vibration, flow' },
-      { icon: 'cpu', name: 'Devices', text: 'Controllers and firmware on the machine' },
-      { icon: 'server', name: 'Edge', text: 'Local processing, buffering, gateways' },
-      { icon: 'cloud', name: 'Cloud', text: 'Secure ingestion and storage' },
-      { icon: 'chartLine', name: 'Analytics', text: 'Trends, alerts and machine data' },
+      { icon: 'activity', name: 'Sensors', text: 'Custom sensors, designed from scratch and calibrated' },
+      { icon: 'cpu', name: 'Devices', text: 'Rugged boards, controllers and firmware for the field' },
+      { icon: 'server', name: 'Edge', text: 'Gateways that process and buffer data on site' },
+      { icon: 'cloud', name: 'Cloud', text: 'Secure ingestion, storage and APIs' },
+      { icon: 'chartLine', name: 'Analytics', text: 'Trends, alerts and insight from machine data' },
       { icon: 'smartphone', name: 'Applications', text: 'Dashboards and phone apps for the people who act' },
     ],
 
